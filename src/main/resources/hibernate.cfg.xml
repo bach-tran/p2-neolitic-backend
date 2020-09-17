@@ -1,0 +1,28 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">password</property>
+		<property name="hibernate.connection.url">jdbc:postgresql://training-ohio.clwebyd8kmnl.us-east-2.rds.amazonaws.com:5432/T200810</property>
+		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+		<property name="hibernate.connection.pool_size">10</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL10Dialect</property>
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
+		
+		<!-- The below property has several different values to configure if/how hibernate will create your schema
+				CREATE: Drops all existing tables and then re-create them
+					Note, some systems won't drop, and will need to potentially use create-drop instead
+				VALIDATE: Will check that schema is as expected, otherwise will not run
+				UPDATE: Hibernate will not delete anything, but will execute ddl to add to your schema
+				NONE: Hibernate will not perform any ddl of any kind
+				CREATE-DROP: Hibernate will create tables when run and drop them as it exists/shuts down -->
+		<property name="hibernate.hbm2ddl.auto">create</property>
+		
+		<!-- Configuration for annotation based mapping -->
+		<!-- This is needed so that Hibernate knows where to look for the annotations -->
+		<mapping class="com.revature.models.User"/>
+	</session-factory>
+</hibernate-configuration>

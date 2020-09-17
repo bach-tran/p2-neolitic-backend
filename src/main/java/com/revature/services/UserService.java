@@ -6,12 +6,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.revature.models.Community;
 import com.revature.models.User;
-import com.revature.models.Postcard;
+import com.revature.models.Post;
 import com.revature.models.Role;
 
-
+@Service
 public class UserService {
 
 	public UserService() {
@@ -19,9 +21,9 @@ public class UserService {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public boolean registerAccount(String firstName, String lastName, String username, String password)
+	public boolean registerAccount(String firstName, String lastName, String username, String hashedPassword)
 	{
-		User u = new User(0, firstName, lastName, username, encryptPassword(password), new Role (2, "consumer"));
+		User u = new User(0, firstName, lastName, username, hashedPassword, new Role (2, "consumer"));
 		
 		return false;
 	}
@@ -36,12 +38,12 @@ public class UserService {
 		return false;
 	}
 	
-	public List<Postcard> viewCommunityPosts(Community c)
+	public List<Post> viewCommunityPosts(Community c)
 	{
 		return null;
 	}
 	
-	public boolean commentOnPost(Postcard post, User u, String comment)
+	public boolean commentOnPost(Post post, User u, String comment)
 	{
 		return false;
 	}
@@ -50,7 +52,7 @@ public class UserService {
 	 * The following methods are restricted to Administrators
 	 */
 	
-	public boolean removePost(Postcard post)
+	public boolean removePost(Post post)
 	{
 		return false;
 	}
@@ -84,12 +86,4 @@ public class UserService {
         return hexString.toString();  
     } 
     
-    public String encryptPassword(String password)
-    {
-    	try {
-			return toHexString(getSHA(password));
-		} catch (NoSuchAlgorithmException | NullPointerException e) {
-			return password;
-		}
-    }
 }

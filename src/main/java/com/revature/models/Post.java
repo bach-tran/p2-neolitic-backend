@@ -3,7 +3,7 @@ package com.revature.models;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
-public class Postcard {
+public class Post {
 
 	private int id;
 	private byte[] image;
@@ -12,13 +12,13 @@ public class Postcard {
 	private int author;
 	private Timestamp timePosted;
 		
-	public Postcard() {
+	public Post() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 
-	public Postcard(int id, byte[] image, String caption, Community community, int author, Timestamp timePosted) {
+	public Post(int id, byte[] image, String caption, Community community, int author, Timestamp timePosted) {
 		super();
 		this.id = id;
 		this.image = image;
@@ -108,10 +108,10 @@ public class Postcard {
 		if (this == obj) {
 			return true;
 		}
-		if (!(obj instanceof Postcard)) {
+		if (!(obj instanceof Post)) {
 			return false;
 		}
-		Postcard other = (Postcard) obj;
+		Post other = (Post) obj;
 		if (author != other.author) {
 			return false;
 		}
