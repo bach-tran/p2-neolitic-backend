@@ -6,19 +6,24 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.revature.exceptions.LoginException;
 import com.revature.models.Community;
 import com.revature.models.User;
+import com.revature.repositories.UserDAO;
 import com.revature.models.Post;
 import com.revature.models.Role;
 
 @Service
 public class UserService {
 
+	@Autowired
+	private UserDAO userDAO;
+	
 	public UserService() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public boolean registerAccount(String firstName, String lastName, String username, String hashedPassword)
@@ -28,9 +33,11 @@ public class UserService {
 		return false;
 	}
 	
-	public boolean login(String username, String password)
+	public User login(String username, String hashedPassword) throws LoginException
 	{
-		return false;
+		User user = userDAO.login(username, hashedPassword);
+		
+		return user;
 	}
 	
 	public boolean createPost(byte[] image, String caption, Community community)
