@@ -2,7 +2,10 @@ package com.revature.util;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+
+import com.revature.models.Role;
 
 public class HibernateUtility {
 	
@@ -33,4 +36,5 @@ public class HibernateUtility {
 	public static void closeSession() {
 		session.close();
 	}
+	
 }

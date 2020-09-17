@@ -8,7 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -39,16 +42,17 @@ public class User implements Serializable {
 	@Column(nullable = false)
 	private String lastName;
 	
-	@Column(nullable = false)
+	@ManyToOne
+	@JoinColumn(name="role_id", nullable = false)
 	private Role role;
 	
 	// Posts
-	@OneToMany(mappedBy="user")
-	Set<Post> posts;
-	
-	// Comments
-	@OneToMany(mappedBy="user")
-	Set<Comment> comments;
+//	@OneToMany(mappedBy="user")
+//	Set<Post> posts;
+//	
+//	// Comments
+//	@OneToMany(mappedBy="user")
+//	Set<Comment> comments;
 	
 	
 	public User(int id, String username, String password, String firstName, String lastName, Role role) {

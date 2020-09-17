@@ -63,7 +63,10 @@ public class UserService {
 	}
 	
 	/* 
-	 * The following three methods are used to hash passwords with SHA-256.
+	 * The following two methods are used to hash passwords with SHA-256. 
+	 * 
+	 * The first generates the password hash as a byte array
+	 * The second converts the password into a hex string
 	 */
 
 	public byte[] getSHA(String input) throws NoSuchAlgorithmException 
