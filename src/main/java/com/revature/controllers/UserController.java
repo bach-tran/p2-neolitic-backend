@@ -2,6 +2,9 @@ package com.revature.controllers;
 
 import java.security.NoSuchAlgorithmException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +32,7 @@ public class UserController {
 	private static Logger log = Logger.getLogger(UserController.class);
 	
 	@RequestMapping(value = "/user/login", method = RequestMethod.POST)
-	public @ResponseBody User login(@RequestBody LoginDTO dto) throws LoginException {
+	public @ResponseBody User login(@RequestBody LoginDTO dto, HttpServletRequest req) throws LoginException {
 		
 		log.info("login method invoked");
 		
@@ -58,7 +61,19 @@ public class UserController {
 		
 		log.info("user " + username + " sucessfully logged in");
 		
+		// Check if session already has currentUser
+		HttpSession session = req.getSession(false);
+		session.setAttribute("currentUser", user);
+		
 		return user;
+	}
+	
+	@RequestMapping(value = "/user/current", method = RequestMethod.POST)
+	public @ResponseBody User checkLoggedIn(HttpServletRequest req) {
+		HttpSession session = req.getSession();
+		
+		User currentUser = (User) session.getAttribute("currentUser");
+		return currentUser;
 	}
 	
 	@RequestMapping(value = "/user/register", method = RequestMethod.POST)
