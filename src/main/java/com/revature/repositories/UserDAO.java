@@ -19,7 +19,6 @@ public class UserDAO implements IUserDAO {
 	
 	@Override
 	public User login(String username, String hashedPassword) throws LoginException {
-//		Transaction tx = session.beginTransaction();
 		
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaQuery<User> cq = cb.createQuery(User.class);
@@ -30,8 +29,7 @@ public class UserDAO implements IUserDAO {
 		
 		try {
 			User user = session.createQuery(cq).getSingleResult();
-			
-//			tx.commit();
+
 			return user;
 		} catch (NoResultException e) {
 			throw new LoginException("Unable to find a user that matches specified username and password");

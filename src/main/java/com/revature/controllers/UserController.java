@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.revature.dto.LoginDTO;
@@ -26,7 +27,7 @@ public class UserController {
 	private static Logger log = Logger.getLogger(UserController.class);
 	
 	@RequestMapping(value = "/user/login", method = RequestMethod.POST)
-	public User login(@RequestBody LoginDTO dto) throws LoginException {
+	public @ResponseBody User login(@RequestBody LoginDTO dto) throws LoginException {
 		
 		log.info("login method invoked");
 		
@@ -51,7 +52,9 @@ public class UserController {
 		
 		log.info("user " + username + " 's password successfully hashed to " + hashedPassword);
 		
-		return null;
+		User user = userService.login(username, hashedPassword);
+		
+		return user;
 	}
 		
 }
