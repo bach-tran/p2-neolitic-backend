@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.revature.dto.LoginDTO;
+import com.revature.dto.RegisterDTO;
 import com.revature.exceptions.LoginException;
+import com.revature.exceptions.RegistrationException;
 import com.revature.models.User;
 import com.revature.services.UserService;
 
@@ -54,7 +56,42 @@ public class UserController {
 		
 		User user = userService.login(username, hashedPassword);
 		
+		log.info("user " + username + " sucessfully logged in");
+		
 		return user;
+	}
+	
+	@RequestMapping(value = "/user/register", method = RequestMethod.POST)
+	public @ResponseBody User register(@RequestBody RegisterDTO dto) throws RegistrationException {
+		
+		log.info("register method invoked");
+		
+		String firstName = dto.getFirstName();
+		String lastName = dto.getLastName();
+		String username = dto.getUsername();
+		String password = dto.getPassword();
+		String confirmPassword = dto.getConfirmPassword();
+		log.info("Registration information retrieved from DTO");
+		
+		if (firstName.equals("") || firstName == null || lastName.equals("") || lastName == null
+			|| username.equals("") || username == null || password.equals("") || password == null 
+			|| confirmPassword.equals("") || confirmPassword == null) {
+			throw new RegistrationException("Not all registration information was provided or was unable to be retrieved");
+		}
+		
+		byte[] hashedArray;
+		String hashedPassword;
+		try {
+			hashedArray = userService.getSHA(password);
+			hashedPassword = userService.toHexString(hashedArray);
+		} catch (NoSuchAlgorithmException e) {
+			log.error("Unable to get hashed password byte array");
+			throw new RegistrationException(e);
+		}
+		
+		User user = userService.registerAccount(firstName, lastName, username, hashedPassword);
+		
+		return null;
 	}
 		
 }

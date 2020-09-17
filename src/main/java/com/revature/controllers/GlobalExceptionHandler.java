@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.revature.exceptions.LoginException;
+import com.revature.exceptions.RegistrationException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -16,9 +17,15 @@ public class GlobalExceptionHandler {
 	
 	// ====================================================================================================================
 	// Exception handlers
-	@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Username and/or password not properly provided in JSON format")
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Unable to login using provided credentials")
 	@ExceptionHandler(LoginException.class)
 	public void loginException(Exception ex) {
+		log.error(ex.getMessage());
+	}
+	
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Unable to register using provided credentials")
+	@ExceptionHandler(RegistrationException.class)
+	public void registrationException(Exception ex) {
 		log.error(ex.getMessage());
 	}
 	
