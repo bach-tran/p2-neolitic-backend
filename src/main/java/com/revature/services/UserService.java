@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.exceptions.LoginException;
+import com.revature.exceptions.RegistrationException;
 import com.revature.models.Community;
 import com.revature.models.User;
 import com.revature.repositories.UserDAO;
@@ -27,11 +28,13 @@ public class UserService {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public boolean registerAccount(String firstName, String lastName, String username, String hashedPassword)
+	public User registerAccount(String firstName, String lastName, String username, String hashedPassword) throws RegistrationException
 	{
-		User u = new User(0, firstName, lastName, username, hashedPassword, new Role (2, "consumer"));
+		User u = new User(0, username, hashedPassword, firstName, lastName, new Role(2, "consumer"));
 		
-		return false;
+		userDAO.register(u);
+		
+		return u;
 	}
 	
 	public User login(String username, String hashedPassword) throws LoginException
