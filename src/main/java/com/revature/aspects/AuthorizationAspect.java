@@ -40,4 +40,22 @@ public class AuthorizationAspect {
 		return result;
 	}
 	
+	@Around("@annotation(com.revature.annotations.AuthorizedConsumer)")
+	public Object authenticateConsumer(ProceedingJoinPoint pjp) throws Throwable {
+		
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		
+		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+		
+		HttpSession session = request.getSession(false);
+		
+		if (session == null || session.getAttribute("currentUser") == null) {
+			response.sendError(401, "You must be logged in to access the resource");
+			return null;
+		} 
+		
+		Object result = pjp.proceed(pjp.getArgs());
+		return result;
+	}
+	
 }
