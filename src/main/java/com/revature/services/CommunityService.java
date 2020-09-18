@@ -26,14 +26,18 @@ public class CommunityService {
 	public Community addCommunity(String name, String description) throws CommunityException {
 		Community c = new Community(0, name, description);
 		
-		communityDAO.insertCommunity(c);
-		
-		if (c.getId() == 0) {
-			log.error("Community was not successfully inserted");
-			throw new CommunityException("Community was not successfully inserted. Check if name is already taken.");
+		if (communityDAO.findByName(name).getName().equals(name)) {
+			log.error("Community with name " + name + " already exists");
+			throw new CommunityException("Community name " + name + " already exists. Cannot add community");
 		}
 		
-		return c;
+		Community insertedCommunity = communityDAO.insertCommunity(c);
+		if(insertedCommunity == null) {
+			log.error("Community was not successfully inserted");
+			throw new CommunityException("Community was not successfully inserted.");
+		}
+		
+		return insertedCommunity;
 	}
 	
 	public Set<Community> getCommunities() {
