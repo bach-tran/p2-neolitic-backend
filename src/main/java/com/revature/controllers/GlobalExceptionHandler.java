@@ -15,6 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.revature.exceptions.LoginException;
 import com.revature.exceptions.RegistrationException;
+import com.revature.util.HibernateUtility;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -29,6 +30,8 @@ public class GlobalExceptionHandler {
 		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
 		response.sendError(400, ex.getMessage());
 		log.error(ex.getMessage());
+		
+		HibernateUtility.closeSession();
 	}
 	
 //	@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Unable to register using provided credentials.")
@@ -37,6 +40,8 @@ public class GlobalExceptionHandler {
 		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
 		response.sendError(400, ex.getMessage());
 		log.error(ex.getMessage());
+		
+		HibernateUtility.closeSession();
 	}
 	
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
@@ -53,5 +58,7 @@ public class GlobalExceptionHandler {
 		if (AnnotationUtils.findAnnotation
                 (ex.getClass(), ResponseStatus.class) != null)
 			throw ex;
+		
+		HibernateUtility.closeSession();
 	}
 }
