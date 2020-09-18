@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.revature.exceptions.LoginException;
 import com.revature.exceptions.RegistrationException;
 import com.revature.models.User;
+import com.revature.repositories.IUserDAO;
 import com.revature.repositories.UserDAO;
 import com.revature.models.Role;
 
@@ -18,11 +19,10 @@ import com.revature.models.Role;
 public class UserService {
 	
 	@Autowired
-	private UserDAO userDAO;
+	private IUserDAO userDAO;
 
 	public UserService() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public User registerAccount(String firstName, String lastName, String username, String hashedPassword) throws RegistrationException

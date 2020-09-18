@@ -5,10 +5,12 @@ import java.util.stream.Collectors;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import com.revature.models.Community;
 import com.revature.util.HibernateUtility;
 
+@Repository
 public class CommunityDAO implements ICommunityDAO{
 
 	@Override
