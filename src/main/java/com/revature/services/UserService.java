@@ -33,9 +33,16 @@ public class UserService {
 	
 	public User registerAccount(String firstName, String lastName, String username, String hashedPassword) throws RegistrationException
 	{
+		if (firstName.equals("") || lastName.equals("") || username.equals("") || hashedPassword.equals("")) {
+			throw new RegistrationException("Registration information fields cannot be blank");
+		}
+		
+		firstName = firstName.substring(0,1).toUpperCase() + firstName.substring(1);
+		lastName = lastName.substring(0,1).toUpperCase() + lastName.substring(1);
+		
 		User u = new User(0, username, hashedPassword, firstName, lastName, new Role(2, "consumer"));
 		
-		userDAO.register(u);
+		u = userDAO.register(u);
 		
 		return u;
 	}
