@@ -29,5 +29,6 @@
 		<mapping class="com.revature.models.User" />
 		<mapping class="com.revature.models.Role" />
 		<mapping class="com.revature.models.Community" />
+		<mapping class="com.revature.models.Post" />
 	</session-factory>
 </hibernate-configuration>
