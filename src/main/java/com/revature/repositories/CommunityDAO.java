@@ -3,6 +3,8 @@ package com.revature.repositories;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.Query;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
@@ -17,13 +19,13 @@ public class CommunityDAO implements ICommunityDAO{
 	public Set<Community> findAll() {
 		
 		Session s = HibernateUtility.getSession();
-		Transaction tx = s.beginTransaction();
+//		Transaction tx = s.beginTransaction();
 		
 		Set<Community> result = s.createQuery("FROM Community c", Community.class)
 				.getResultStream()
 				.collect(Collectors.toSet());
 		
-		tx.commit();
+//		tx.commit();
 		
 		return result;
 	}
@@ -39,7 +41,13 @@ public class CommunityDAO implements ICommunityDAO{
 	public Community findByName(String name) {
 		// TODO Auto-generated method stub
 		Session s = HibernateUtility.getSession();
-		return s.get(Community.class, name);
+		
+		Query q = s.createQuery("FROM Community c WHERE c.name = :community_name");
+		q.setParameter("community_name", name);
+		
+		Community result = (Community) q.getSingleResult();
+		
+		return result;
 	}
 
 	@Override
@@ -48,9 +56,9 @@ public class CommunityDAO implements ICommunityDAO{
 		Session s = HibernateUtility.getSession();
 		Transaction tx = s.beginTransaction();
 		
-		String id = (String) s.save(c);
+		Integer id = (Integer) s.save(c);
 		
-		if(id != null && !id.equals("")) {
+		if(id != null && !(id == 0)) {
 			tx.commit();
 			return c;
 		}
