@@ -1,6 +1,7 @@
 package com.revature.models;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -43,8 +45,8 @@ public class User implements Serializable {
 	private Role role;
 	
 	// Posts
-//	@OneToMany(mappedBy="user")
-//	Set<Post> posts;
+	@OneToMany(mappedBy="author")
+	Set<Post> posts;
 //	
 //	// Comments
 //	@OneToMany(mappedBy="user")

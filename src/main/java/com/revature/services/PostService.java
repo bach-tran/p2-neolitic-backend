@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.revature.exceptions.PostException;
 import com.revature.models.Community;
 import com.revature.models.Post;
+import com.revature.models.User;
 import com.revature.repositories.IPostDAO;
 
 public class PostService {
@@ -23,7 +24,7 @@ public class PostService {
 		super();
 	}
 
-	public Post addPost(byte[] image,  String caption, Community community, int author) throws PostException {
+	public Post addPost(byte[] image,  String caption, Community community, User author) throws PostException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		Post p = new Post(0, image, caption, community, author, timestamp);
 		

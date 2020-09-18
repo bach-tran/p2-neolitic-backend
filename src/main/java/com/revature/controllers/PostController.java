@@ -39,7 +39,7 @@ public class PostController {
 		log.info("getPosts method invoked");
 		
 		
-		Post post = postService.addPost(dto.getImage(), dto.getCaption(), dto.getC(), dto.getAuthor().getId());
+		Post post = postService.addPost(dto.getImage(), dto.getCaption(), dto.getC(), dto.getAuthor());
 		
 		return ResponseEntity.ok(post);
 	}

@@ -2,6 +2,7 @@ package com.revature.models;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -31,17 +33,22 @@ public class Post {
 	@Column(nullable = false)
 	private String caption;
 	
-	@Column(nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "community_id")
 	private Community community;
 	
-	@Column(nullable = false)
-	private int author;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User author;
+	
+//	@OneToMany(mappedBy = "")
+//	private Set<Comment> comments;
 	
 	@Column(nullable = false)
 	private Timestamp timePosted;
 		
 
-	public Post(int id, byte[] image, String caption, Community community, int author, Timestamp timePosted) {
+	public Post(int id, byte[] image, String caption, Community community, User author, Timestamp timePosted) {
 		super();
 		this.id = id;
 		this.image = image;

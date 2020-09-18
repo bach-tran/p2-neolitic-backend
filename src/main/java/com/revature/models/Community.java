@@ -29,8 +29,8 @@ public class Community {
 	@Column(nullable = false)
 	private String description;
 		
-//	@OneToMany(mappedBy="post")
-//	Set<Post> posts;
+	@OneToMany(mappedBy="community")
+	Set<Post> posts;
 
 	public Community(int id, String name, String description) {
 		super();
