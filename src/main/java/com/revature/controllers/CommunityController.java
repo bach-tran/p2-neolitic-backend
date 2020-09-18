@@ -15,8 +15,4 @@ public class CommunityController {
 	
 	private static Logger log = Logger.getLogger(CommunityController.class);
 	
-	public CommunityController() {
-		// TODO Auto-generated constructor stub
-	}
-
 }

@@ -34,16 +34,13 @@ public class UserController {
 		log.info("login method invoked");
 		
 		HttpSession session = req.getSession();
-		// Check if session already has currentUser and throw exception if user is already logged in
-		User currentUser = (User) session.getAttribute("currentUser");
-		if (currentUser != null) {
-			throw new LoginException(currentUser.getUsername() + " is already logged in");
+		if (userService.userLoggedIn(session)) {
+			throw new LoginException(userService.getCurrentUser(session).getUsername() + " is already logged into this session");
 		}
 		
-		// username, password
 		String username = dto.getUsername();
 		String password = dto.getPassword();
-		log.info("username and password retrieved from DTO");
+		log.info("Username and password retrieved from DTO");
 		
 		if (username.equals("") || username == null || password.equals("") || password == null) {
 			throw new LoginException("Username and/or Password was not provided or unable to be retrieved");
@@ -59,13 +56,10 @@ public class UserController {
 			throw new LoginException(e);
 		}
 		
-		log.info("user " + username + " 's password successfully hashed to " + hashedPassword);
+		log.info("User " + username + " 's password successfully hashed to " + hashedPassword);
 		
-		User user = userService.login(username, hashedPassword);
-		
-		log.info("user " + username + " sucessfully logged in");
-		
-		session.setAttribute("currentUser", user);
+		// Call login, which will also set currentUser to the user retrieved from the DAO
+		User user = userService.login(username, hashedPassword, session);
 		
 		return ResponseEntity.ok(user);
 	}
@@ -76,15 +70,13 @@ public class UserController {
 		log.info("checkLoggedIn method invoked");
 		
 		HttpSession session = req.getSession();
-		User currentUser = (User) session.getAttribute("currentUser");
 		
-		if (currentUser == null) {
-			log.info("currentUser not found for session");
+		if (userService.userLoggedIn(session)) {
+			return ResponseEntity.ok(userService.getCurrentUser(session));
+		} else {
 			return ResponseEntity.noContent().build();
 		}
-		
-		log.info(currentUser.getUsername() + " is currently logged in");
-		return ResponseEntity.ok(currentUser);
+	
 	}
 	
 	@RequestMapping(value = "/user/logout", method=RequestMethod.GET)
@@ -92,13 +84,12 @@ public class UserController {
 		log.info("logout method invoked");
 		
 		HttpSession session = req.getSession();
-		User currentUser = (User) session.getAttribute("currentUser");
 		
-		if (currentUser == null) {
+		if (!userService.userLoggedIn(session)) {
 			log.info("currentUser not found for session");
 		} else {
+			log.info(userService.getCurrentUser(session).getUsername() + " has been logged out");
 			session.setAttribute("currentUser", null);
-			log.info(currentUser.getUsername() + " has been logged out");
 		}
 		
 		return ResponseEntity.ok().build();
@@ -109,12 +100,10 @@ public class UserController {
 		log.info("register method invoked");
 		
 		HttpSession session = req.getSession();
-		User currentUser = (User) session.getAttribute("currentUser");
-		
-		if (currentUser != null) {
-			throw new LoginException(currentUser.getUsername() + " is already logged in, cannot register");
+		if (userService.userLoggedIn(session)) {
+			throw new RegistrationException("Cannot register while " + userService.getCurrentUser(session).getUsername() + " is already logged in.");
 		}
-		
+				
 		String firstName = dto.getFirstName();
 		String lastName = dto.getLastName();
 		String username = dto.getUsername();
@@ -138,12 +127,11 @@ public class UserController {
 			throw new RegistrationException(e);
 		}
 		
-		userService.registerAccount(firstName, lastName, username, hashedPassword);
+		User user = userService.registerAccount(firstName, lastName, username, hashedPassword);
 		
-		User user = userService.login(username, hashedPassword);
-		session.setAttribute("currentUser", user);
-		
-		return ResponseEntity.ok(user);
+		User loggedInUser = userService.login(user.getUsername(), user.getPassword(), session);
+				
+		return ResponseEntity.ok(loggedInUser);
 	}
 		
 }

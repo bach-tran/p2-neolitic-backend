@@ -5,9 +5,13 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.revature.controllers.UserController;
 import com.revature.exceptions.LoginException;
 import com.revature.exceptions.RegistrationException;
 import com.revature.models.User;
@@ -20,6 +24,8 @@ public class UserService {
 	
 	@Autowired
 	private IUserDAO userDAO;
+	
+	private static Logger log = Logger.getLogger(UserService.class);
 
 	public UserService() {
 		super();
@@ -34,11 +40,48 @@ public class UserService {
 		return u;
 	}
 	
-	public User login(String username, String hashedPassword) throws LoginException
+	public User login(String username, String hashedPassword, HttpSession session) throws LoginException
 	{
 		User user = userDAO.login(username, hashedPassword);
 		
+		if (session == null) {
+			throw new LoginException("Unable to login because provided session variable is null");
+		} else if (user == null) {
+			throw new LoginException("Credentials were unable to be matched with a user record");
+		} else {
+			session.setAttribute("currentUser", user);
+			log.info("User " + username + " sucessfully logged in");
+		}
+		
 		return user;
+	}
+	
+	public boolean userLoggedIn(HttpSession session) {
+		
+		if (session != null) {
+			User user = (User) session.getAttribute("currentUser");
+			
+			if (user != null) {
+				log.info(user.getUsername() + " is currently logged in");
+				return true;
+			} else {
+				log.info("No user is currently logged in");
+				return false;
+			}
+			
+		} else {
+			log.info("Session provided was null");
+			return false;
+		}
+	}
+	
+	public User getCurrentUser(HttpSession session) {
+		if (session != null) {
+			User user = (User) session.getAttribute("currentUser");
+			return user;
+		} else {
+			return null;
+		}
 	}
 	
 //	public boolean createPost(byte[] image, String caption, Community community)
