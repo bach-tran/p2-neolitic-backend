@@ -67,4 +67,5 @@ public class CommunityDAO implements ICommunityDAO{
 		return null;
 	}
 
+	
 }
