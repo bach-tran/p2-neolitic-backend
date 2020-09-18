@@ -1,11 +1,17 @@
 package com.revature.controllers;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.revature.exceptions.LoginException;
 import com.revature.exceptions.RegistrationException;
@@ -17,15 +23,19 @@ public class GlobalExceptionHandler {
 	
 	// ====================================================================================================================
 	// Exception handlers
-	@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Unable to login using provided credentials")
+//	@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Unable to login using provided credentials")
 	@ExceptionHandler(LoginException.class)
-	public void loginException(Exception ex) {
+	public void loginException(Exception ex) throws IOException {
+		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+		response.sendError(400, ex.getMessage());
 		log.error(ex.getMessage());
 	}
 	
-	@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Unable to register using provided credentials")
+//	@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Unable to register using provided credentials.")
 	@ExceptionHandler(RegistrationException.class)
-	public void registrationException(Exception ex) {
+	public void registrationException(Exception ex) throws IOException {
+		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+		response.sendError(400, ex.getMessage());
 		log.error(ex.getMessage());
 	}
 	

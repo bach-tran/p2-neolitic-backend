@@ -43,7 +43,7 @@ public class CommunityDAO implements ICommunityDAO{
 	}
 
 	@Override
-	public boolean insertCommunity(Community c) {
+	public Community insertCommunity(Community c) {
 		// TODO Auto-generated method stub
 		Session s = HibernateUtility.getSession();
 		Transaction tx = s.beginTransaction();
@@ -52,11 +52,11 @@ public class CommunityDAO implements ICommunityDAO{
 		
 		if(id != null && !id.equals("")) {
 			tx.commit();
-			return true;
+			return c;
 		}
 		
 		tx.rollback();
-		return false;
+		return null;
 	}
 
 }

@@ -13,8 +13,6 @@ public interface ICommunityDAO {
 	
 	public Community findByName(String name);
 	
-	public boolean insertCommunity(Community c);
+	public Community insertCommunity(Community c);
 	
-	
-
 }
