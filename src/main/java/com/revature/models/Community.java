@@ -28,23 +28,15 @@ public class Community {
 	
 	@Column(nullable = false)
 	private String description;
-	
-	@Column(nullable = false)
-	private int admin;
-	
+		
 //	@OneToMany(mappedBy="post")
 //	Set<Post> posts;
 
-	public Community(int id, String name, String description, int admin) {
+	public Community(int id, String name, String description) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.admin = admin;
 	}
-
-
-	
-	
 
 }
