@@ -110,11 +110,9 @@ public class UserController {
 		String password = dto.getPassword();
 		String confirmPassword = dto.getConfirmPassword();
 		log.info("Registration information retrieved from DTO");
-		
-		if (firstName.equals("") || firstName == null || lastName.equals("") || lastName == null
-			|| username.equals("") || username == null || password.equals("") || password == null 
-			|| confirmPassword.equals("") || confirmPassword == null) {
-			throw new RegistrationException("Not all registration information was provided or was unable to be retrieved");
+				
+		if (!password.equals(confirmPassword)) {
+			throw new RegistrationException("Password and confirm password do not match");
 		}
 		
 		byte[] hashedArray;
