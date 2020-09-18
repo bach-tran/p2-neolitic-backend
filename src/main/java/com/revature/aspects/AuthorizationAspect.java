@@ -27,12 +27,17 @@ public class AuthorizationAspect {
 		HttpSession session = request.getSession(false);
 		
 		if (session == null || session.getAttribute("currentUser") == null) {
-			response.sendError(401, "You must be logged in to access the resource");
+			if (response != null) {
+				response.sendError(401, "You must be logged in to access the resource");
+			}
 			return null;
 		} else {
 			User user = (User) session.getAttribute("currentUser");
 			if (!user.getRole().getUserRole().equals("admin")) {
-				response.sendError(401, "Only admins can access this resource");
+				if (response != null) {
+					response.sendError(401, "Only admins can access this resource");
+				}
+				
 				return null;
 			}
 		}
@@ -51,7 +56,10 @@ public class AuthorizationAspect {
 		HttpSession session = request.getSession(false);
 		
 		if (session == null || session.getAttribute("currentUser") == null) {
-			response.sendError(401, "You must be logged in to access the resource");
+			if (response != null) {
+				response.sendError(401, "You must be logged in to access the resource");
+			}
+			
 			return null;
 		} 
 		

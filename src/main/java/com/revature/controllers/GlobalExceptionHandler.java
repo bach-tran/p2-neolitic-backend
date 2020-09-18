@@ -29,7 +29,10 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(LoginException.class)
 	public void loginException(Exception ex) throws IOException {
 		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
-		response.sendError(400, ex.getMessage());
+		if (response != null) {
+			response.sendError(400, ex.getMessage());
+		}
+		
 		log.error(ex.getMessage());
 	}
 	
@@ -37,14 +40,20 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(RegistrationException.class)
 	public void registrationException(Exception ex) throws IOException {
 		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
-		response.sendError(400, ex.getMessage());
+		if (response != null) {
+			response.sendError(400, ex.getMessage());
+		}
+		
 		log.error(ex.getMessage());
 	}
 	
 	@ExceptionHandler(CommunityException.class)
 	public void communityException(Exception ex) throws IOException {
 		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
-		response.sendError(400, ex.getMessage());
+		if (response != null) {
+			response.sendError(400, ex.getMessage());
+		}
+		
 		log.error(ex.getMessage());
 	}
 	
