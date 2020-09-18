@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.revature.exceptions.CommunityException;
 import com.revature.exceptions.LoginException;
 import com.revature.exceptions.RegistrationException;
 import com.revature.util.HibernateUtility;
@@ -30,7 +31,6 @@ public class GlobalExceptionHandler {
 		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
 		response.sendError(400, ex.getMessage());
 		log.error(ex.getMessage());
-		
 	}
 	
 //	@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Unable to register using provided credentials.")
@@ -39,7 +39,13 @@ public class GlobalExceptionHandler {
 		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
 		response.sendError(400, ex.getMessage());
 		log.error(ex.getMessage());
-		
+	}
+	
+	@ExceptionHandler(CommunityException.class)
+	public void communityException(Exception ex) throws IOException {
+		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+		response.sendError(400, ex.getMessage());
+		log.error(ex.getMessage());
 	}
 	
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)

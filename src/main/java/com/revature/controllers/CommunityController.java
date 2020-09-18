@@ -34,7 +34,7 @@ public class CommunityController {
 		String name = dto.getName();
 		String description = dto.getDescription();
 		
-		if (name == null || name.equals("") || description == null || description.equals("")) {
+		if (name.equals("") || description.equals("")) {
 			throw new CommunityException("Name and/or description cannot be blank when sending a request to add a community");
 		}
 		
