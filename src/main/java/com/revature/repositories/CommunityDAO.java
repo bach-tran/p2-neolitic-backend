@@ -3,6 +3,7 @@ package com.revature.repositories;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.hibernate.Session;
@@ -45,9 +46,13 @@ public class CommunityDAO implements ICommunityDAO{
 		Query q = s.createQuery("FROM Community c WHERE c.name = :community_name");
 		q.setParameter("community_name", name);
 		
-		Community result = (Community) q.getSingleResult();
-		
-		return result;
+		try {
+			Community result = (Community) q.getSingleResult();
+			
+			return result;
+		} catch(NoResultException e) {
+			return null;
+		}
 	}
 
 	@Override

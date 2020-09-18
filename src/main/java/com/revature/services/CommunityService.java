@@ -26,7 +26,8 @@ public class CommunityService {
 	public Community addCommunity(String name, String description) throws CommunityException {
 		Community c = new Community(0, name, description);
 		
-		if (communityDAO.findByName(name).getName().equals(name)) {
+		Community previouslyExisting = communityDAO.findByName(name);
+		if (previouslyExisting != null && previouslyExisting.getName().equals(name)) {
 			log.error("Community with name " + name + " already exists");
 			throw new CommunityException("Community name " + name + " already exists. Cannot add community");
 		}
