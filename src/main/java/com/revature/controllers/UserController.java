@@ -7,14 +7,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.revature.dto.LoginDTO;
 import com.revature.dto.RegisterDTO;
@@ -32,9 +29,16 @@ public class UserController {
 	private static Logger log = Logger.getLogger(UserController.class);
 	
 	@RequestMapping(value = "/user/login", method = RequestMethod.POST)
-	public @ResponseBody User login(@RequestBody LoginDTO dto, HttpServletRequest req) throws LoginException {
-		
+	public ResponseEntity<User> login(@RequestBody LoginDTO dto, HttpServletRequest req) throws LoginException {
+			
 		log.info("login method invoked");
+		
+		HttpSession session = req.getSession();
+		// Check if session already has currentUser and throw exception if user is already logged in
+		User currentUser = (User) session.getAttribute("currentUser");
+		if (currentUser != null) {
+			throw new LoginException(currentUser.getUsername() + " is already logged in");
+		}
 		
 		// username, password
 		String username = dto.getUsername();
@@ -61,25 +65,55 @@ public class UserController {
 		
 		log.info("user " + username + " sucessfully logged in");
 		
-		// Check if session already has currentUser
-		HttpSession session = req.getSession(false);
 		session.setAttribute("currentUser", user);
 		
-		return user;
+		return ResponseEntity.ok(user);
 	}
 	
-	@RequestMapping(value = "/user/current", method = RequestMethod.POST)
-	public @ResponseBody User checkLoggedIn(HttpServletRequest req) {
-		HttpSession session = req.getSession();
+	@RequestMapping(value = "/user/current", method = RequestMethod.GET)
+	public ResponseEntity<User> checkCurrentUser(HttpServletRequest req) {
 		
+		log.info("checkLoggedIn method invoked");
+		
+		HttpSession session = req.getSession();
 		User currentUser = (User) session.getAttribute("currentUser");
-		return currentUser;
+		
+		if (currentUser == null) {
+			log.info("currentUser not found for session");
+			return ResponseEntity.noContent().build();
+		}
+		
+		log.info(currentUser.getUsername() + " is currently logged in");
+		return ResponseEntity.ok(currentUser);
+	}
+	
+	@RequestMapping(value = "/user/logout", method=RequestMethod.GET)
+	public ResponseEntity<?> logout(HttpServletRequest req) {
+		log.info("logout method invoked");
+		
+		HttpSession session = req.getSession();
+		User currentUser = (User) session.getAttribute("currentUser");
+		
+		if (currentUser == null) {
+			log.info("currentUser not found for session");
+		} else {
+			session.setAttribute("currentUser", null);
+			log.info(currentUser.getUsername() + " has been logged out");
+		}
+		
+		return ResponseEntity.ok().build();
 	}
 	
 	@RequestMapping(value = "/user/register", method = RequestMethod.POST)
-	public @ResponseBody User register(@RequestBody RegisterDTO dto) throws RegistrationException {
-		
+	public ResponseEntity<User> register(@RequestBody RegisterDTO dto, HttpServletRequest req) throws RegistrationException, LoginException {
 		log.info("register method invoked");
+		
+		HttpSession session = req.getSession();
+		User currentUser = (User) session.getAttribute("currentUser");
+		
+		if (currentUser != null) {
+			throw new LoginException(currentUser.getUsername() + " is already logged in, cannot register");
+		}
 		
 		String firstName = dto.getFirstName();
 		String lastName = dto.getLastName();
@@ -104,9 +138,12 @@ public class UserController {
 			throw new RegistrationException(e);
 		}
 		
-		User user = userService.registerAccount(firstName, lastName, username, hashedPassword);
+		userService.registerAccount(firstName, lastName, username, hashedPassword);
 		
-		return null;
+		User user = userService.login(username, hashedPassword);
+		session.setAttribute("currentUser", user);
+		
+		return ResponseEntity.ok(user);
 	}
 		
 }

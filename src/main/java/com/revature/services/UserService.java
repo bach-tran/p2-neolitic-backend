@@ -4,17 +4,14 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.exceptions.LoginException;
 import com.revature.exceptions.RegistrationException;
-import com.revature.models.Community;
 import com.revature.models.User;
 import com.revature.repositories.UserDAO;
-import com.revature.models.Post;
 import com.revature.models.Role;
 
 @Service
@@ -44,34 +41,34 @@ public class UserService {
 		return user;
 	}
 	
-	public boolean createPost(byte[] image, String caption, Community community)
-	{
-		return false;
-	}
-	
-	public List<Post> viewCommunityPosts(Community c)
-	{
-		return null;
-	}
-	
-	public boolean commentOnPost(Post post, User u, String comment)
-	{
-		return false;
-	}
-	
-	/*
-	 * The following methods are restricted to Administrators
-	 */
-	
-	public boolean removePost(Post post)
-	{
-		return false;
-	}
-	
-	public boolean addNewCommunity(Community c)
-	{
-		return false;
-	}
+//	public boolean createPost(byte[] image, String caption, Community community)
+//	{
+//		return false;
+//	}
+//	
+//	public List<Post> viewCommunityPosts(Community c)
+//	{
+//		return null;
+//	}
+//	
+//	public boolean commentOnPost(Post post, User u, String comment)
+//	{
+//		return false;
+//	}
+//	
+//	/*
+//	 * The following methods are restricted to Administrators
+//	 */
+//	
+//	public boolean removePost(Post post)
+//	{
+//		return false;
+//	}
+//	
+//	public boolean addNewCommunity(Community c)
+//	{
+//		return false;
+//	}
 	
 	/* 
 	 * The following two methods are used to hash passwords with SHA-256. 
