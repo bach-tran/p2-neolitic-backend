@@ -33,6 +33,7 @@ public class AuthorizationAspect {
 			User user = (User) session.getAttribute("currentUser");
 			if (!user.getRole().getUserRole().equals("admin")) {
 				response.sendError(401, "Only admins can access this resource");
+				return null;
 			}
 		}
 		
