@@ -31,7 +31,6 @@ public class GlobalExceptionHandler {
 		response.sendError(400, ex.getMessage());
 		log.error(ex.getMessage());
 		
-		HibernateUtility.closeSession();
 	}
 	
 //	@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Unable to register using provided credentials.")
@@ -41,7 +40,6 @@ public class GlobalExceptionHandler {
 		response.sendError(400, ex.getMessage());
 		log.error(ex.getMessage());
 		
-		HibernateUtility.closeSession();
 	}
 	
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
@@ -59,6 +57,5 @@ public class GlobalExceptionHandler {
                 (ex.getClass(), ResponseStatus.class) != null)
 			throw ex;
 		
-		HibernateUtility.closeSession();
 	}
 }
