@@ -1,5 +1,6 @@
 package com.revature.models;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -10,18 +11,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
-@NoArgsConstructor @Getter @Setter @EqualsAndHashCode @ToString
-public class Community {
+@NoArgsConstructor @Setter @EqualsAndHashCode
+public class Community implements Serializable {
 	
+	private static final long serialVersionUID = -5195131354417257767L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -32,9 +33,8 @@ public class Community {
 	@Column(nullable = false)
 	private String description;
 	
-//	@JsonManagedReference
-//	@OneToMany(mappedBy="community")
-//	Set<Post> posts;
+	@OneToMany(mappedBy = "community", fetch = FetchType.LAZY)
+	Set<Post> posts;
 
 	public Community(int id, String name, String description) {
 		super();
@@ -43,4 +43,26 @@ public class Community {
 		this.description = description;
 	}
 
+	@Override
+	public String toString() {
+		return "Community [id=" + id + ", name=" + name + ", description=" + description + "]";
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	@JsonIgnore
+	public Set<Post> getPosts() {
+		return posts;
+	}
+	
 }

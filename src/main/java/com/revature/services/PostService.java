@@ -24,20 +24,20 @@ public class PostService {
 		super();
 	}
 
-	public Post addPost(byte[] image,  String caption, Community community, User author) throws PostException {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		Post p = new Post(0, image, caption, community, author, timestamp);
-		
-		
-		Post insertedPost = postDAO.insertPost(p);
-		
-		if(insertedPost == null) {
-			log.error("Post was not successfully inserted");
-			throw new PostException("Post was not successfully inserted.");
-		}
-		
-		return insertedPost;
-	}
+//	public Post addPost(byte[] image,  String caption, Community community, User author) throws PostException {
+//		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+//		Post p = new Post(0, image, caption, community, author, timestamp);
+//		
+//		
+//		Post insertedPost = postDAO.insertPost(p);
+//		
+//		if(insertedPost == null) {
+//			log.error("Post was not successfully inserted");
+//			throw new PostException("Post was not successfully inserted.");
+//		}
+//		
+//		return insertedPost;
+//	}
 	
 	public List<Post> getPosts(Community c) {
 		List<Post> posts = postDAO.findAllInCommunity(c);
