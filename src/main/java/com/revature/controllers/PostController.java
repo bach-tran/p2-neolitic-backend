@@ -33,16 +33,16 @@ public class PostController {
 		return ResponseEntity.ok(posts);
 	}
 	
-	@AuthorizedConsumer
-	@RequestMapping(value = "/post", method = RequestMethod.GET)
-	public ResponseEntity<Post> addPostToCommunity(@RequestBody AddPostDTO dto) throws PostException {
-		log.info("getPosts method invoked");
-		
-		
-		Post post = postService.addPost(dto.getImage(), dto.getCaption(), dto.getC(), dto.getAuthor());
-		
-		return ResponseEntity.ok(post);
-	}
+//	@AuthorizedConsumer
+//	@RequestMapping(value = "/post", method = RequestMethod.GET)
+//	public ResponseEntity<Post> addPostToCommunity(@RequestBody AddPostDTO dto) throws PostException {
+//		log.info("getPosts method invoked");
+//		
+//		
+//		Post post = postService.addPost(dto.getImage(), dto.getCaption(), dto.getC(), dto.getAuthor());
+//		
+//		return ResponseEntity.ok(post);
+//	}
 	
 
 }

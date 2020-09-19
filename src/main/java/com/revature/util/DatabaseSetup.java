@@ -1,5 +1,10 @@
 package com.revature.util;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
@@ -15,7 +20,7 @@ public class DatabaseSetup {
 
 	private static Logger log = Logger.getLogger(DatabaseSetup.class);
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		Session s = HibernateUtility.getSession();
 		
 //		Transaction tx = s.beginTransaction();
@@ -36,11 +41,19 @@ public class DatabaseSetup {
 		
 		
 		Post post = s.get(Post.class, 2);
-		log.info("Here is the post object: " + post.toString());
+		System.out.println(post);
 		byte[] bytes = post.getImage();
 //		log.info("byte array: " + Arrays.toString(bytes));
-//		System.out.println(new Byte[10]);
 		
+		// FILE WRITING STUFF
+		File file = new File("C:\\Users\\Bach_\\Desktop\\Project2\\neolitic-backend\\neolitic\\src\\main\\resources\\image.png");
+		OutputStream os = new FileOutputStream(file);
+		os.write(bytes); 
+        System.out.println("Successfully"
+                           + " byte inserted"); 
+
+        // Close the file 
+        os.close(); 
 		
 		HibernateUtility.closeSession();
 	}

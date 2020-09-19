@@ -1,9 +1,7 @@
 package com.revature.models;
 
-import java.sql.Blob;
+import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,21 +10,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
-@NoArgsConstructor @Getter @Setter @EqualsAndHashCode
-public class Post {
+@NoArgsConstructor @Setter @EqualsAndHashCode
+public class Post implements Serializable {
+
+	private static final long serialVersionUID = 895275161634396778L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,12 +31,8 @@ public class Post {
 	
 	@Column(nullable = false)
 	private String caption;
-	
-	@ManyToOne
-	@JoinColumn(name = "community_id")
-	private Community community;
-	
-	@ManyToOne
+		
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User author;
 	
@@ -51,23 +41,39 @@ public class Post {
 	
 	@Column(nullable = false)
 	private Timestamp timePosted;
-		
+	
+	
 
-	public Post(int id, byte[] image, String caption, Community community, User author, Timestamp timePosted) {
+	public Post(int id, byte[] image, String caption, User author, Timestamp timePosted) {
 		super();
 		this.id = id;
 		this.image = image;
 		this.caption = caption;
-		this.community = community;
 		this.author = author;
 		this.timePosted = timePosted;
 	}
 
 
-	@Override
-	public String toString() {
-		return "Post [id=" + id + ", caption=" + caption + ", community=" + community + ", author=" + author
-				+ ", timePosted=" + timePosted + "]";
+	public int getId() {
+		return id;
+	}
+
+
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public String getCaption() {
+		return caption;
+	}
+
+	public User getAuthor() {
+		return author;
+	}
+
+	public Timestamp getTimePosted() {
+		return timePosted;
 	}
 	
 }
