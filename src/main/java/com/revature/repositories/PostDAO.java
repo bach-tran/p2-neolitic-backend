@@ -3,6 +3,7 @@ package com.revature.repositories;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.Query;
 
@@ -78,7 +79,9 @@ public class PostDAO implements IPostDAO{
 		Query q = s.createQuery("FROM Post p WHERE p.community = :community");
 		q.setParameter("community", c);
 		
-		Set<Post> posts = (Set<Post>) q.getResultStream().collect(Collectors.toSet());
+		Stream<Post> stream = q.getResultStream();
+		Set<Post> posts = stream.collect(Collectors.toSet());
+		
 		System.out.println("This got the posts");
 		return posts;
 	}
