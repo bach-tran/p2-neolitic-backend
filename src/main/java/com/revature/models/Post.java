@@ -53,10 +53,10 @@ public class Post {
 	private Timestamp timePosted;
 		
 
-	public Post(int id, Blob image, String caption, Community community, User author, Timestamp timePosted) {
+	public Post(int id, byte[] image, String caption, Community community, User author, Timestamp timePosted) {
 		super();
 		this.id = id;
-//		this.image = image;
+		this.image = image;
 		this.caption = caption;
 		this.community = community;
 		this.author = author;
