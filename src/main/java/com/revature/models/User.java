@@ -11,11 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@NoArgsConstructor @Setter @EqualsAndHashCode
+@NoArgsConstructor @Getter @Setter @EqualsAndHashCode @ToString
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -7591110146973722213L;
@@ -55,35 +57,4 @@ public class User implements Serializable {
 		this.role = role;
 	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", role=" + role + "]";
-	}
-
-
-	public int getId() {
-		return id;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public Role getRole() {
-		return role;
-	}
-	
 }

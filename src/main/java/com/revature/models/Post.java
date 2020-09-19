@@ -13,11 +13,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@NoArgsConstructor @Setter @EqualsAndHashCode
+@NoArgsConstructor @Getter @Setter @EqualsAndHashCode @ToString
 public class Post implements Serializable {
 
 	private static final long serialVersionUID = 895275161634396778L;
@@ -31,19 +33,14 @@ public class Post implements Serializable {
 	
 	@Column(nullable = false)
 	private String caption;
-		
-	@ManyToOne(fetch = FetchType.LAZY)
+	
+	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User author;
-	
-//	@OneToMany(mappedBy = "")
-//	private Set<Comment> comments;
-	
+		
 	@Column(nullable = false)
 	private Timestamp timePosted;
 	
-	
-
 	public Post(int id, byte[] image, String caption, User author, Timestamp timePosted) {
 		super();
 		this.id = id;
@@ -51,29 +48,6 @@ public class Post implements Serializable {
 		this.caption = caption;
 		this.author = author;
 		this.timePosted = timePosted;
-	}
-
-
-	public int getId() {
-		return id;
-	}
-
-
-
-	public byte[] getImage() {
-		return image;
-	}
-
-	public String getCaption() {
-		return caption;
-	}
-
-	public User getAuthor() {
-		return author;
-	}
-
-	public Timestamp getTimePosted() {
-		return timePosted;
 	}
 	
 }
