@@ -1,7 +1,10 @@
 package com.revature.controllers;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.revature.annotations.AuthorizedConsumer;
 import com.revature.dto.SendPostDTO;
+import com.revature.exceptions.AddPostException;
 import com.revature.exceptions.PostException;
 import com.revature.models.Post;
+import com.revature.models.User;
 import com.revature.services.PostService;
 
 @Controller
@@ -47,16 +52,24 @@ public class PostController {
 	
 	@AuthorizedConsumer
 	@RequestMapping(value = "/post", method = RequestMethod.POST)
-	public /*ResponseEntity<Post>*/ void addPostToCommunity(@RequestParam("communityId") int id, @RequestParam("caption") String caption, 
-			@RequestParam("file") MultipartFile file) throws PostException {
+	public /*ResponseEntity<Post>*/ void addPostToCommunity(@RequestParam("communityId") int communityId, @RequestParam("caption") String caption, 
+			@RequestParam("file") MultipartFile file, HttpServletRequest req) throws PostException, AddPostException {
 		
-//		log.info("getPosts method invoked");
-		log.info(caption);
-		log.info(id);
-		String contentType = file.getContentType();
-		MediaType mt = MediaType.parseMediaType(contentType);
-		System.out.println(mt.getType() + mt.getSubtype());
-//		Post post = postService.addPost(dto.getImage(), dto.getCaption(), dto.getC(), dto.getAuthor());
+		log.info("addPostToCommunity method invoked");
+		
+		User user = (User) req.getSession().getAttribute("currentUser");
+		
+		if (user == null) {
+			throw new AddPostException("Unable to associate post with a user");
+		}
+		
+		Post post;
+		try {
+			/*post =*/ postService.addPost(communityId, caption, file, user);
+		} catch (IOException e) {
+			log.error(e);
+			throw new AddPostException(e);
+		}
 		
 //		return ResponseEntity.ok(post);
 	}

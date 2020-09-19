@@ -56,15 +56,15 @@ public class PostDAO implements IPostDAO{
 		Session s = HibernateUtility.getSession();
 		Transaction tx = s.beginTransaction();
 		
-		Integer id = (Integer) s.save(p);
-		
-		if(id != null && !(id == 0)) {
+		try {
+			s.saveOrUpdate(p);
 			tx.commit();
 			return p;
+		} catch (Exception e) {
+			tx.rollback();
+			return null;
 		}
-		
-		tx.rollback();
-		return null;
+	
 	}
 
 	@Override

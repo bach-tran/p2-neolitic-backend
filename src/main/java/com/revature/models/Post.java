@@ -19,7 +19,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@NoArgsConstructor @Getter @Setter @EqualsAndHashCode @ToString
+@NoArgsConstructor @Getter @Setter @EqualsAndHashCode
 public class Post implements Serializable {
 
 	private static final long serialVersionUID = 895275161634396778L;
@@ -53,6 +53,12 @@ public class Post implements Serializable {
 		this.author = author;
 		this.community = community;
 		this.timePosted = timePosted;
+	}
+
+	@Override
+	public String toString() {
+		return "Post [id=" + id + ", caption=" + caption + ", community=" + community + ", author=" + author
+				+ ", timePosted=" + timePosted + "]";
 	}
 	
 }
