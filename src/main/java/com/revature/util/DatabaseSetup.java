@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.Timestamp;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
@@ -23,8 +24,8 @@ public class DatabaseSetup {
 	public static void main(String[] args) throws IOException {
 		Session s = HibernateUtility.getSession();
 		
-//		Transaction tx = s.beginTransaction();
-//		
+		Transaction tx = s.beginTransaction();
+		
 //		s.saveOrUpdate(new Role(1, "admin"));
 //		s.saveOrUpdate(new Role(2, "consumer"));
 //		
@@ -39,22 +40,31 @@ public class DatabaseSetup {
 //		
 //		tx.commit();
 		
+//		Post newPost = new Post(0, new byte[10], "Hello", s.get(User.class, 1), new Timestamp(System.currentTimeMillis()));
+//		s.persist(newPost);
+//		s.get(Community.class, 1).getPosts().add(newPost);
+//		
+//		
+//		tx.commit();
 		
-		Post post = s.get(Post.class, 2);
-		System.out.println(post);
-		byte[] bytes = post.getImage();
-//		log.info("byte array: " + Arrays.toString(bytes));
+		System.out.println(s.get(Community.class, 1).getPosts());
 		
-		// FILE WRITING STUFF
-		File file = new File("C:\\Users\\Bach_\\Desktop\\Project2\\neolitic-backend\\neolitic\\src\\main\\resources\\image.png");
-		OutputStream os = new FileOutputStream(file);
-		os.write(bytes); 
-        System.out.println("Successfully"
-                           + " byte inserted"); 
-
-        // Close the file 
-        os.close(); 
-		
+		tx.commit();
+//		Post post = s.get(Post.class, 2);
+//		System.out.println(post);
+//		byte[] bytes = post.getImage();
+////		log.info("byte array: " + Arrays.toString(bytes));
+//		
+//		// FILE WRITING STUFF
+//		File file = new File("C:\\Users\\Bach_\\Desktop\\Project2\\neolitic-backend\\neolitic\\src\\main\\resources\\image.png");
+//		OutputStream os = new FileOutputStream(file);
+//		os.write(bytes); 
+//        System.out.println("Successfully"
+//                           + " byte inserted"); 
+//
+//        // Close the file 
+//        os.close(); 
+//		
 		HibernateUtility.closeSession();
 	}
 	

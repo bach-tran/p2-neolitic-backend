@@ -14,11 +14,13 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@NoArgsConstructor @Setter @EqualsAndHashCode
+@NoArgsConstructor @Getter @Setter @EqualsAndHashCode @ToString
 public class Community implements Serializable {
 	
 	private static final long serialVersionUID = -5195131354417257767L;
@@ -33,7 +35,7 @@ public class Community implements Serializable {
 	@Column(nullable = false)
 	private String description;
 	
-	@OneToMany(mappedBy = "community", fetch = FetchType.LAZY)
+	@OneToMany
 	Set<Post> posts;
 
 	public Community(int id, String name, String description) {
@@ -41,28 +43,6 @@ public class Community implements Serializable {
 		this.id = id;
 		this.name = name;
 		this.description = description;
-	}
-
-	@Override
-	public String toString() {
-		return "Community [id=" + id + ", name=" + name + ", description=" + description + "]";
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	@JsonIgnore
-	public Set<Post> getPosts() {
-		return posts;
 	}
 	
 }
