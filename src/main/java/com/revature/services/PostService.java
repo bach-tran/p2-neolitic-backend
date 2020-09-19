@@ -2,10 +2,13 @@ package com.revature.services;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.revature.exceptions.PostException;
 import com.revature.models.Community;
@@ -13,6 +16,7 @@ import com.revature.models.Post;
 import com.revature.models.User;
 import com.revature.repositories.IPostDAO;
 
+@Service
 public class PostService {
 
 	@Autowired
@@ -39,11 +43,11 @@ public class PostService {
 //		return insertedPost;
 //	}
 	
-	public List<Post> getPosts(Community c) {
-		List<Post> posts = postDAO.findAllInCommunity(c);
+	public Set<Post> getPosts(int communityId) {
+		Set<Post> posts = postDAO.findAllInCommunity(communityId);
 		
 		if (posts == null) {
-			posts = new ArrayList<Post>();
+			posts = new HashSet<Post>();
 		}
 		
 		return posts;

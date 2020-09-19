@@ -1,17 +1,20 @@
 package com.revature.repositories;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.Query;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import com.revature.models.Community;
 import com.revature.models.Post;
 import com.revature.util.HibernateUtility;
 
+@Repository
 public class PostDAO implements IPostDAO{
 
 	@Override
@@ -64,16 +67,15 @@ public class PostDAO implements IPostDAO{
 	}
 
 	@Override
-	public List<Post> findAllInCommunity(Community c) {
+	public Set<Post> findAllInCommunity(int communityId) {
 		
 		Session s = HibernateUtility.getSession();
 		
-		Query q = s.createQuery("FROM Post p WHERE p.community= :community_id");
-		q.setParameter("community_id", c);
+		s.clear();
 		
-		@SuppressWarnings("unchecked")
-		List<Post> result = (List<Post>) q.getResultList();
-		return result;
+		Set<Post> posts = s.get(Community.class, communityId).getPosts();
+		
+		return posts;
 	}
 
 }
