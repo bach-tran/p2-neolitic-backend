@@ -43,7 +43,7 @@ public class CommunityDAO implements ICommunityDAO{
 		// TODO Auto-generated method stub
 		Session s = HibernateUtility.getSession();
 		
-		Query q = s.createQuery("FROM Community c WHERE c.name = :community_name");
+		Query q = s.createQuery("FROM Community c WHERE lower(c.name) LIKE lower(:community_name)");
 		q.setParameter("community_name", name);
 		
 		try {
