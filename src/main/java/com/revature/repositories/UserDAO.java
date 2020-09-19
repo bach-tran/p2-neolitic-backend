@@ -27,7 +27,10 @@ public class UserDAO implements IUserDAO {
 	@Override
 	public User login(String username, String hashedPassword) throws LoginException {
 		
+		session.clear();
+		
 		CriteriaBuilder cb = session.getCriteriaBuilder();
+		
 		CriteriaQuery<User> cq = cb.createQuery(User.class);
 		
 		Root<User> root = cq.from(User.class);

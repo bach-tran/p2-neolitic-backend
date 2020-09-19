@@ -35,9 +35,6 @@ public class Community implements Serializable {
 	@Column(nullable = false)
 	private String description;
 	
-	@OneToMany
-	Set<Post> posts;
-
 	public Community(int id, String name, String description) {
 		super();
 		this.id = id;

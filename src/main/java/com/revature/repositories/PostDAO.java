@@ -73,8 +73,13 @@ public class PostDAO implements IPostDAO{
 		
 		s.clear();
 		
-		Set<Post> posts = s.get(Community.class, communityId).getPosts();
+		Community c = s.get(Community.class, communityId);
 		
+		Query q = s.createQuery("FROM Post p WHERE p.community = :community");
+		q.setParameter("community", c);
+		
+		Set<Post> posts = (Set<Post>) q.getResultStream().collect(Collectors.toSet());
+		System.out.println("This got the posts");
 		return posts;
 	}
 

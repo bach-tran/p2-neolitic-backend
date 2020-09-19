@@ -35,18 +35,23 @@ public class Post implements Serializable {
 	private String caption;
 	
 	@ManyToOne
+	@JoinColumn(name = "community_id")
+	private Community community;
+	
+	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User author;
 		
 	@Column(nullable = false)
 	private Timestamp timePosted;
 	
-	public Post(int id, byte[] image, String caption, User author, Timestamp timePosted) {
+	public Post(int id, byte[] image, String caption, User author, Community community, Timestamp timePosted) {
 		super();
 		this.id = id;
 		this.image = image;
 		this.caption = caption;
 		this.author = author;
+		this.community = community;
 		this.timePosted = timePosted;
 	}
 	

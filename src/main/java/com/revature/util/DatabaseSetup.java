@@ -26,30 +26,32 @@ public class DatabaseSetup {
 		
 		Transaction tx = s.beginTransaction();
 		
-//		s.saveOrUpdate(new Role(1, "admin"));
-//		s.saveOrUpdate(new Role(2, "consumer"));
-//		
-//		tx.commit();
-//		
-//		s.clear();
-//		
-//		tx = s.beginTransaction();
-//		
-//		s.saveOrUpdate(new User(0, "bach_tran", "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad", "Bach", "Tran", new Role(2, "consumer")));
-//		s.saveOrUpdate(new Community(0, "Gaming", "For video games"));
-//		
-//		tx.commit();
+		s.saveOrUpdate(new Role(1, "admin"));
+		s.saveOrUpdate(new Role(2, "consumer"));
 		
-//		Post newPost = new Post(0, new byte[10], "Hello", s.get(User.class, 1), new Timestamp(System.currentTimeMillis()));
-//		s.persist(newPost);
+		tx.commit();
+		
+		s.clear();
+		
+		tx = s.beginTransaction();
+		
+		s.saveOrUpdate(new User(0, "bach_tran", "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad", "Bach", "Tran", new Role(2, "consumer")));
+		s.saveOrUpdate(new Community(0, "Gaming", "For video games"));
+		
+		tx.commit();
+		
+		tx = s.beginTransaction();
+		
+		Post newPost = new Post(0, new byte[10], "This is a fake picture", s.get(User.class, 1), s.get(Community.class, 1), new Timestamp(System.currentTimeMillis()));
+		s.persist(newPost);
 //		s.get(Community.class, 1).getPosts().add(newPost);
 //		
 //		
-//		tx.commit();
-		
-		System.out.println(s.get(Community.class, 1).getPosts());
-		
 		tx.commit();
+		
+//		System.out.println(s.get(Community.class, 1).getPosts());
+		
+//		tx.commit();
 //		Post post = s.get(Post.class, 2);
 //		System.out.println(post);
 //		byte[] bytes = post.getImage();
