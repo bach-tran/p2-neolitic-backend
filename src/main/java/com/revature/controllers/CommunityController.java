@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.revature.annotations.AuthorizedAdmin;
 import com.revature.annotations.AuthorizedConsumer;
 import com.revature.dto.AddCommunityDTO;
+import com.revature.dto.SendCommunityDTO;
 import com.revature.exceptions.CommunityException;
 import com.revature.models.Community;
 import com.revature.services.CommunityService;
@@ -28,7 +30,7 @@ public class CommunityController {
 	
 	@AuthorizedAdmin
 	@RequestMapping(value = "/community", method = RequestMethod.POST)
-	public ResponseEntity<Community> addCommunity(@RequestBody AddCommunityDTO dto) throws CommunityException {
+	public ResponseEntity<SendCommunityDTO> addCommunity(@RequestBody AddCommunityDTO dto) throws CommunityException {
 		log.info("addCommunity method invoked");
 		
 		String name = dto.getName();
@@ -40,17 +42,24 @@ public class CommunityController {
 		
 		Community c = communityService.addCommunity(name, description);
 		
-		return ResponseEntity.ok(c);
+		SendCommunityDTO sendDto = new SendCommunityDTO(c.getId(), c.getName(), c.getDescription());
+		
+		return ResponseEntity.ok(sendDto);
 	}
 	
 	@AuthorizedConsumer
 	@RequestMapping(value = "/community", method = RequestMethod.GET)
-	public ResponseEntity<Set<Community>> getCommunities() {
+	public ResponseEntity<Set<SendCommunityDTO>> getCommunities() {
 		log.info("getCommunities method invoked");
 		
 		Set<Community> communities = communityService.getCommunities();
 		
-		return ResponseEntity.ok(communities);
+		Set<SendCommunityDTO> communitiesDto = new HashSet<>();
+		for (Community community : communities) {
+			communitiesDto.add(new SendCommunityDTO(community.getId(), community.getName(), community.getDescription()));
+		}
+		
+		return ResponseEntity.ok(communitiesDto);
 	}
 	
 	
