@@ -1,21 +1,17 @@
 package com.revature.controllers;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.revature.annotations.AuthorizedConsumer;
-import com.revature.dto.AddPostDTO;
-import com.revature.dto.GetPostsOfCommunityDTO;
 import com.revature.dto.SendPostDTO;
 import com.revature.exceptions.PostException;
 import com.revature.models.Post;
@@ -31,11 +27,10 @@ public class PostController {
 	
 	@AuthorizedConsumer
 	@RequestMapping(value = "/post", method = RequestMethod.GET)
-	public ResponseEntity<Set<SendPostDTO>> getPostsInCommunity(@RequestBody GetPostsOfCommunityDTO dto) throws PostException {
+	public ResponseEntity<Set<SendPostDTO>> getPostsInCommunity(@RequestParam int communityId) throws PostException {
 		log.info("getPosts method invoked");
 		
-		
-		Set<Post> posts = postService.getPosts(dto.getId());
+		Set<Post> posts = postService.getPosts(communityId);
 		
 		Set<SendPostDTO> postsDto = new HashSet<>();
 		for (Post post : posts) {
