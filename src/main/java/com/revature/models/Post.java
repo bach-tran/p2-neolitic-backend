@@ -1,17 +1,22 @@
 package com.revature.models;
 
+import java.sql.Blob;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,7 +25,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@NoArgsConstructor @Getter @Setter @EqualsAndHashCode @ToString
+@NoArgsConstructor @Getter @Setter @EqualsAndHashCode
 public class Post {
 
 	@Id
@@ -48,10 +53,10 @@ public class Post {
 	private Timestamp timePosted;
 		
 
-	public Post(int id, byte[] image, String caption, Community community, User author, Timestamp timePosted) {
+	public Post(int id, Blob image, String caption, Community community, User author, Timestamp timePosted) {
 		super();
 		this.id = id;
-		this.image = image;
+//		this.image = image;
 		this.caption = caption;
 		this.community = community;
 		this.author = author;
@@ -59,9 +64,10 @@ public class Post {
 	}
 
 
-	
-	
-	
-	
+	@Override
+	public String toString() {
+		return "Post [id=" + id + ", caption=" + caption + ", community=" + community + ", author=" + author
+				+ ", timePosted=" + timePosted + "]";
+	}
 	
 }

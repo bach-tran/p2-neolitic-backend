@@ -5,12 +5,15 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -45,10 +48,11 @@ public class User implements Serializable {
 	private Role role;
 	
 	// Posts
-	@OneToMany(mappedBy="author")
-	Set<Post> posts;
-//	
-//	// Comments
+//	@JsonManagedReference
+//	@OneToMany(mappedBy="author")
+//	Set<Post> posts;
+	
+	// Comments
 //	@OneToMany(mappedBy="user")
 //	Set<Comment> comments;
 	
