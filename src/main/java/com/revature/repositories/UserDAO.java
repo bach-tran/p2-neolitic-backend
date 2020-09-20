@@ -37,13 +37,15 @@ public class UserDAO implements IUserDAO {
 		
 		cq.select(root).where(cb.and(cb.equal(root.get("username"), username), cb.equal(root.get("password"), hashedPassword)));
 		
-		try {
-			User user = session.createQuery(cq).getSingleResult();
-			return user;
-		} catch (NoResultException e) {
-			throw new LoginException("Unable to find a user that matches specified username and password");
-		} 
+		Query query = session.createQuery(cq);
+		query.setMaxResults(1);
 		
+		List<User> list = query.getResultList();
+		if (list == null || list.isEmpty()) {
+			return null;
+		}
+		
+		return list.get(0);
 	}
 	
 	@Override
