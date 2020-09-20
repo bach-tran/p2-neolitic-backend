@@ -117,34 +117,5 @@ public class UserService {
   
         return hexString.toString();  
     } 
-    
-//	public boolean createPost(byte[] image, String caption, Community community)
-//	{
-//		return false;
-//	}
-//	
-//	public List<Post> viewCommunityPosts(Community c)
-//	{
-//		return null;
-//	}
-//	
-//	public boolean commentOnPost(Post post, User u, String comment)
-//	{
-//		return false;
-//	}
-//	
-//	/*
-//	 * The following methods are restricted to Administrators
-//	 */
-//	
-//	public boolean removePost(Post post)
-//	{
-//		return false;
-//	}
-//	
-//	public boolean addNewCommunity(Community c)
-//	{
-//		return false;
-//	}
-    
+        
 }
