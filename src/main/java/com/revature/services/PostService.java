@@ -18,6 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.revature.exceptions.AddPostException;
+import com.revature.exceptions.GetImageException;
 import com.revature.exceptions.PostException;
 import com.revature.models.Community;
 import com.revature.models.Post;
@@ -44,6 +45,10 @@ public class PostService {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		
 		Community c = communityDAO.findById(communityId);
+		if (c == null) {
+			log.error("Community attempting to add post to does not exist");
+			throw new AddPostException("Community to attempting to add post to does not exist");
+		}
 		
 		byte[] image = file.getBytes();
 		String contentType = file.getContentType();
@@ -51,7 +56,7 @@ public class PostService {
 		
 		String subtype = mt.getSubtype();
 		
-		if (!(subtype.equals("jpeg") || subtype.equals("bmp") || subtype.equals("gif") || subtype.equals("png") || subtype.equals("tiff"))) {
+		if (!(subtype.equals("jpeg") || subtype.equals("jpg") || subtype.equals("bmp") || subtype.equals("gif") || subtype.equals("png") || subtype.equals("tiff"))) {
 			throw new AddPostException("File upload does not correspond to jpeg, bmp, gif, png, or tiff");
 		}
 		
@@ -61,7 +66,7 @@ public class PostService {
 		
 		if(insertedPost == null) {
 			log.error("Post was not successfully inserted");
-			throw new PostException("Post was not successfully inserted.");
+			throw new AddPostException("Post was not successfully inserted.");
 		}
 		
 		return insertedPost;
@@ -77,12 +82,16 @@ public class PostService {
 		return posts;
 	}
 
-	public byte[] getImage(int postId) {
+	public byte[] getImage(int postId) throws GetImageException {
 		
 		Post post = postDAO.findById(postId);
 		
-		byte[] image = post.getImage();
+		if (post == null) {
+			throw new GetImageException("No such post ID exists");
+		} 
 		
+		byte[] image = post.getImage();
 		return image;
+		
 	}
 }
