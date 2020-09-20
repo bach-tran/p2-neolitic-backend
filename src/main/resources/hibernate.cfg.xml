@@ -30,5 +30,6 @@
 		<mapping class="com.revature.models.Role" />
 		<mapping class="com.revature.models.Community" />
 		<mapping class="com.revature.models.Post" />
+		<mapping class="com.revature.models.Comment" />
 	</session-factory>
 </hibernate-configuration>
