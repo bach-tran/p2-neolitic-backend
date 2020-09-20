@@ -1,16 +1,21 @@
 package com.revature.controllers;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URLConnection;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.revature.annotations.AuthorizedConsumer;
 import com.revature.dto.SendPostDTO;
 import com.revature.exceptions.AddPostException;
+import com.revature.exceptions.GetImageException;
 import com.revature.exceptions.PostException;
 import com.revature.models.Post;
 import com.revature.models.User;
@@ -32,8 +38,11 @@ public class PostController {
 	@Autowired
 	private PostService postService;
 	
-	private static Logger log = Logger.getLogger(PostController.class);
+	@Autowired
+	private Tika tika;
 	
+	private static Logger log = Logger.getLogger(PostController.class);
+		
 	@AuthorizedConsumer
 	@RequestMapping(value = "/post", method = RequestMethod.GET)
 	public ResponseEntity<Set<SendPostDTO>> getPostsInCommunity(@RequestParam int communityId) throws PostException {
@@ -52,7 +61,7 @@ public class PostController {
 	
 	@AuthorizedConsumer
 	@RequestMapping(value = "/post", method = RequestMethod.POST)
-	public /*ResponseEntity<Post>*/ void addPostToCommunity(@RequestParam("communityId") int communityId, @RequestParam("caption") String caption, 
+	public ResponseEntity<SendPostDTO> addPostToCommunity(@RequestParam("communityId") int communityId, @RequestParam("caption") String caption, 
 			@RequestParam("file") MultipartFile file, HttpServletRequest req) throws PostException, AddPostException {
 		
 		log.info("addPostToCommunity method invoked");
@@ -64,15 +73,30 @@ public class PostController {
 		}
 		
 		Post post;
+		SendPostDTO dto;
 		try {
-			/*post =*/ postService.addPost(communityId, caption, file, user);
+			post = postService.addPost(communityId, caption, file, user);
 		} catch (IOException e) {
 			log.error(e);
 			throw new AddPostException(e);
 		}
 		
-//		return ResponseEntity.ok(post);
+		dto = new SendPostDTO(post.getId(), post.getCaption(), post.getAuthor(), post.getTimePosted());
+		
+		return ResponseEntity.ok(dto);
 	}
 	
+	@AuthorizedConsumer
+	@RequestMapping(value = "/post/image/{ID}", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> getImage(@PathVariable(value="ID") int postId, HttpServletResponse resp) throws GetImageException {
+		
+		byte[] image = postService.getImage(postId);
+		
+		String contentType = tika.detect(image);
+		
+		MediaType type = MediaType.parseMediaType(contentType);
+		
+		return ResponseEntity.ok().contentType(type).body(image);
+	}
 
 }

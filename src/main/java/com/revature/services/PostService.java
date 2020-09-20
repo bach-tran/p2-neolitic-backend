@@ -76,4 +76,13 @@ public class PostService {
 		
 		return posts;
 	}
+
+	public byte[] getImage(int postId) {
+		
+		Post post = postDAO.findById(postId);
+		
+		byte[] image = post.getImage();
+		
+		return image;
+	}
 }
