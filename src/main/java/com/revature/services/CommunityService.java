@@ -28,8 +28,8 @@ public class CommunityService {
 		
 		Community previouslyExisting = communityDAO.findByName(name);
 		if (previouslyExisting != null && previouslyExisting.getName().equalsIgnoreCase(name)) {
-			log.error("Community with name " + name + " already exists");
-			throw new CommunityException("Community name " + name + " already exists. Cannot add community");
+			log.error("Community with name " + previouslyExisting.getName() + " already exists");
+			throw new CommunityException("Community name " + previouslyExisting.getName() + " already exists. Cannot add community");
 		}
 		
 		Community insertedCommunity = communityDAO.insertCommunity(c);
