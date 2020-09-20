@@ -25,7 +25,7 @@ public class UserDAO implements IUserDAO {
 	private Session session = HibernateUtility.getSession();
 	
 	@Override
-	public User login(String username, String hashedPassword) throws LoginException {
+	public User login(String username, String hashedPassword) throws LoginException {	
 		
 		session.clear();
 		
@@ -52,11 +52,9 @@ public class UserDAO implements IUserDAO {
 	public User register(User u) throws RegistrationException {
 		Transaction tx = session.beginTransaction();
 		
-		List<User> prexistingUser;
-		
 		Query query = session.createQuery("FROM User u WHERE u.username = :username");
 		query.setParameter("username", u.getUsername());
-		prexistingUser = query.getResultList();
+		List<User> prexistingUser = query.getResultList();
 		if (prexistingUser.size() == 1) {
 			tx.rollback();
 			throw new RegistrationException("User already exists");

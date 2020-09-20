@@ -52,8 +52,9 @@ public class PostController {
 		
 		Set<SendPostDTO> postsDto = new HashSet<>();
 		for (Post post : posts) {
-			post.getAuthor().setPassword("");
-			postsDto.add(new SendPostDTO(post.getId(), post.getCaption(), post.getAuthor(), post.getTimePosted()));
+			User blankPasswordAuthor = new User(post.getAuthor().getId(), post.getAuthor().getUsername(), "", post.getAuthor().getFirstName(), post.getAuthor().getLastName(),
+					post.getAuthor().getRole());
+			postsDto.add(new SendPostDTO(post.getId(), post.getCaption(), blankPasswordAuthor, post.getTimePosted()));
 		}
 		
 		return ResponseEntity.ok(postsDto);
