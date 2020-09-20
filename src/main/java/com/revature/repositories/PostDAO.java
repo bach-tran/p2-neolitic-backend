@@ -82,7 +82,6 @@ public class PostDAO implements IPostDAO{
 		Stream<Post> stream = q.getResultStream();
 		Set<Post> posts = stream.collect(Collectors.toSet());
 		
-		System.out.println("This got the posts");
 		return posts;
 	}
 
