@@ -26,7 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.revature.annotations.AuthorizedConsumer;
 import com.revature.dto.SendPostDTO;
 import com.revature.exceptions.AddPostException;
+import com.revature.exceptions.CommunityDoesNotExist;
 import com.revature.exceptions.GetImageException;
+import com.revature.exceptions.PostDoesNotExist;
 import com.revature.exceptions.PostException;
 import com.revature.models.Post;
 import com.revature.models.User;
@@ -45,7 +47,7 @@ public class PostController {
 		
 	@AuthorizedConsumer
 	@RequestMapping(value = "/post", method = RequestMethod.GET)
-	public ResponseEntity<Set<SendPostDTO>> getPostsInCommunity(@RequestParam int communityId) throws PostException {
+	public ResponseEntity<Set<SendPostDTO>> getPostsInCommunity(@RequestParam int communityId) throws CommunityDoesNotExist {
 		log.info("getPosts method invoked");
 		
 		Set<Post> posts = postService.getPosts(communityId);
@@ -63,7 +65,7 @@ public class PostController {
 	@AuthorizedConsumer
 	@RequestMapping(value = "/post", method = RequestMethod.POST)
 	public ResponseEntity<SendPostDTO> addPostToCommunity(@RequestParam("communityId") int communityId, @RequestParam("caption") String caption, 
-			@RequestParam("file") MultipartFile file, HttpServletRequest req) throws PostException, AddPostException {
+			@RequestParam("file") MultipartFile file, HttpServletRequest req) throws AddPostException, CommunityDoesNotExist {
 		
 		log.info("addPostToCommunity method invoked");
 		
@@ -89,7 +91,7 @@ public class PostController {
 	
 	@AuthorizedConsumer
 	@RequestMapping(value = "/post/image/{ID}", method = RequestMethod.GET)
-	public ResponseEntity<byte[]> getImage(@PathVariable(value="ID") int postId, HttpServletResponse resp) throws GetImageException {
+	public ResponseEntity<byte[]> getImage(@PathVariable(value="ID") int postId, HttpServletResponse resp) throws PostDoesNotExist, GetImageException {
 		
 		byte[] image = postService.getImage(postId);
 		

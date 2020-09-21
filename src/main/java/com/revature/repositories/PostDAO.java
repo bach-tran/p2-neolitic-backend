@@ -32,14 +32,12 @@ public class PostDAO implements IPostDAO{
 	
 	@Override
 	public Post findById(int id) {
-		// TODO Auto-generated method stub
 		Session s = HibernateUtility.getSession();
 		return s.get(Post.class, id);
 	}
 
 	@Override
 	public Post findByAuthorId(int id) {
-		// TODO Auto-generated method stub
 		Session s = HibernateUtility.getSession();
 		
 		Query q = s.createQuery("FROM Post p WHERE p.author = :author_id");
@@ -52,7 +50,6 @@ public class PostDAO implements IPostDAO{
 
 	@Override
 	public Post insertPost(Post p) {
-		// TODO Auto-generated method stub
 		Session s = HibernateUtility.getSession();
 		Transaction tx = s.beginTransaction();
 		

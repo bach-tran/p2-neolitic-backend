@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.revature.exceptions.AddCommentException;
 import com.revature.exceptions.AddPostException;
+import com.revature.exceptions.CommunityDoesNotExist;
 import com.revature.exceptions.CommunityException;
 import com.revature.exceptions.GetImageException;
 import com.revature.exceptions.LoginException;
+import com.revature.exceptions.PostDoesNotExist;
 import com.revature.exceptions.PostException;
 import com.revature.exceptions.RegistrationException;
 import com.revature.util.HibernateUtility;
@@ -29,11 +32,21 @@ public class GlobalExceptionHandler {
 	// ====================================================================================================================
 	// Exception handlers
 	
-	@ExceptionHandler({CommunityException.class, RegistrationException.class, LoginException.class, PostException.class, AddPostException.class, GetImageException.class})
-	public void communityException(Exception ex) throws IOException {
+	@ExceptionHandler({CommunityException.class, RegistrationException.class, LoginException.class, PostException.class, AddPostException.class, GetImageException.class, AddCommentException.class})
+	public void badRequestException(Exception ex) throws IOException {
 		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
 		if (response != null) {
 			response.sendError(400, ex.getMessage());
+		}
+		
+		log.error(ex.getMessage());
+	}
+	
+	@ExceptionHandler({PostDoesNotExist.class, CommunityDoesNotExist.class})
+	public void notFoundException(Exception ex) throws IOException {
+		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+		if (response != null) {
+			response.sendError(404, ex.getMessage());
 		}
 		
 		log.error(ex.getMessage());
