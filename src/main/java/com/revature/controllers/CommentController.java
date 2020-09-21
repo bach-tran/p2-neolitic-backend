@@ -10,14 +10,17 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.revature.annotations.AuthorizedConsumer;
+import com.revature.dto.AddCommentDTO;
 import com.revature.dto.SendCommentDTO;
 import com.revature.dto.SendPostDTO;
+import com.revature.exceptions.AddCommentException;
 import com.revature.exceptions.AddPostException;
 import com.revature.exceptions.PostDoesNotExist;
 import com.revature.exceptions.PostException;
@@ -45,37 +48,31 @@ public class CommentController {
 		for (Comment comment : comments) {
 			User blankPasswordAuthor = new User(comment.getAuthor().getId(), comment.getAuthor().getUsername(), "", comment.getAuthor().getFirstName(), comment.getAuthor().getLastName(),
 					comment.getAuthor().getRole());
-			commentDto.add(new SendCommentDTO(comment.getId(), comment.getText(), blankPasswordAuthor));
+			commentDto.add(new SendCommentDTO(comment.getId(), comment.getText(), blankPasswordAuthor, comment.getTimePosted()));
 		}
 		
 		return ResponseEntity.ok(commentDto);
 	}
 	
-//	@AuthorizedConsumer
-//	@RequestMapping(value = "/post", method = RequestMethod.POST)
-//	public ResponseEntity<SendPostDTO> addPostToCommunity(@RequestParam("communityId") int communityId, @RequestParam("caption") String caption, 
-//			@RequestParam("file") MultipartFile file, HttpServletRequest req) throws PostException, AddPostException {
-//		
-//		log.info("addPostToCommunity method invoked");
-//		
-//		User user = (User) req.getSession().getAttribute("currentUser");
-//		
-//		if (user == null) {
-//			throw new AddPostException("Unable to associate post with a user");
-//		}
-//		
-//		Post post;
-//		SendPostDTO dto;
-//		try {
-//			post = postService.addPost(communityId, caption, file, user);
-//		} catch (IOException e) {
-//			log.error(e);
-//			throw new AddPostException(e);
-//		}
-//		
-//		dto = new SendPostDTO(post.getId(), post.getCaption(), post.getAuthor(), post.getTimePosted());
-//		
-//		return ResponseEntity.ok(dto);
-//	}
+	@AuthorizedConsumer
+	@RequestMapping(value = "/comment", method = RequestMethod.POST)
+	public ResponseEntity<SendCommentDTO> addCommentToPost(@RequestBody AddCommentDTO dto, HttpServletRequest req) throws PostException, AddPostException, PostDoesNotExist, AddCommentException {
+		
+		log.info("addCommentToPost method invoked");
+		
+		User user = (User) req.getSession().getAttribute("currentUser");
+		
+		if (user == null) {
+			throw new AddPostException("Unable to associate post with a user");
+		}
+		
+		Comment comment;
+		
+		comment = commentService.addCommentToPost(dto.getPostId(), dto.getText(), user);
+		
+		SendCommentDTO sendDto = new SendCommentDTO(comment.getId(), comment.getText(), comment.getAuthor(), comment.getTimePosted());
+		
+		return ResponseEntity.ok(sendDto);
+	}
 
 }

@@ -53,7 +53,7 @@ public class CommentService {
 			throw new PostDoesNotExist("Attempted to add comment to postID " + postId + ", but it does not appear to exist");
 		}
 		
-		Comment c = new Comment(0, text, user, post);
+		Comment c = new Comment(0, text, user, post, timestamp);
 		
 		Comment insertedComment = commentDao.insertComment(c);
 		if (insertedComment == null) {

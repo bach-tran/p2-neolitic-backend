@@ -34,13 +34,16 @@ public class Comment {
 	@ManyToOne
 	@JoinColumn(name = "post_id")
 	private Post post;
+	
+	private Timestamp timePosted;
 
-	public Comment(int id, String text, User author, Post post) {
+	public Comment(int id, String text, User author, Post post, Timestamp timePosted) {
 		super();
 		this.id = id;
 		this.text = text;
 		this.author = author;
 		this.post = post;
+		this.timePosted = timePosted;
 	}
 	
 }
