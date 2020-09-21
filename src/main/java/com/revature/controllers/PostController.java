@@ -89,7 +89,7 @@ public class PostController {
 		return ResponseEntity.ok(dto);
 	}
 	
-	@AuthorizedConsumer
+//	@AuthorizedConsumer
 	@RequestMapping(value = "/post/image/{ID}", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getImage(@PathVariable(value="ID") int postId, HttpServletResponse resp) throws PostDoesNotExist, GetImageException {
 		
