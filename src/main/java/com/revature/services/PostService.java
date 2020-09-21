@@ -18,7 +18,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.revature.exceptions.AddPostException;
+import com.revature.exceptions.CommunityDoesNotExist;
 import com.revature.exceptions.GetImageException;
+import com.revature.exceptions.PostDoesNotExist;
 import com.revature.exceptions.PostException;
 import com.revature.models.Community;
 import com.revature.models.Post;
@@ -41,13 +43,13 @@ public class PostService {
 		super();
 	}
 
-	public Post addPost(int communityId, String caption, MultipartFile file, User user) throws PostException, IOException, AddPostException {
+	public Post addPost(int communityId, String caption, MultipartFile file, User user) throws AddPostException, CommunityDoesNotExist, IOException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		
 		Community c = communityDAO.findById(communityId);
 		if (c == null) {
 			log.error("Community attempting to add post to does not exist");
-			throw new AddPostException("Community to attempting to add post to does not exist");
+			throw new CommunityDoesNotExist("Community attempting to add post to does not exist");
 		}
 		
 		byte[] image = file.getBytes();
@@ -72,7 +74,14 @@ public class PostService {
 		return insertedPost;
 	}
 	
-	public Set<Post> getPosts(int communityId) {
+	public Set<Post> getPosts(int communityId) throws CommunityDoesNotExist {
+		
+		Community c = communityDAO.findById(communityId);
+		if (c == null) {
+			log.error("Community attempting to find posts from does not exist");
+			throw new CommunityDoesNotExist("Community attempting to find posts from does not exist");
+		}
+		
 		Set<Post> posts = postDAO.findAllInCommunity(communityId);
 		
 		if (posts == null) {
@@ -82,12 +91,12 @@ public class PostService {
 		return posts;
 	}
 
-	public byte[] getImage(int postId) throws GetImageException {
+	public byte[] getImage(int postId) throws GetImageException, PostDoesNotExist {
 		
 		Post post = postDAO.findById(postId);
 		
 		if (post == null) {
-			throw new GetImageException("No such post ID exists");
+			throw new PostDoesNotExist("No such post ID exists");
 		} 
 		
 		byte[] image = post.getImage();

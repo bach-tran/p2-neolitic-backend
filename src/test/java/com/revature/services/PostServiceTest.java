@@ -20,7 +20,9 @@ import org.mockito.internal.util.collections.Sets;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.revature.exceptions.AddPostException;
+import com.revature.exceptions.CommunityDoesNotExist;
 import com.revature.exceptions.GetImageException;
+import com.revature.exceptions.PostDoesNotExist;
 import com.revature.exceptions.PostException;
 import com.revature.models.Community;
 import com.revature.models.Post;
@@ -44,8 +46,8 @@ public class PostServiceTest {
 		MockitoAnnotations.initMocks(this);
 	}
 
-	@Test(expected = AddPostException.class)
-	public void addPost_CommunityDoesNotExist() throws PostException, IOException, AddPostException {
+	@Test(expected = CommunityDoesNotExist.class)
+	public void addPost_CommunityDoesNotExist() throws PostException, IOException, AddPostException, CommunityDoesNotExist {
 		when(communityDao.findById(eq(1))).thenReturn(null);
 		
 		MultipartFile file = mock(MultipartFile.class);
@@ -54,7 +56,8 @@ public class PostServiceTest {
 	}
 	
 	@Test(expected = AddPostException.class)
-	public void addPost_notAcceptedFormat() throws IOException, PostException, AddPostException {
+	public void addPost_notAcceptedFormat() throws IOException, AddPostException, CommunityDoesNotExist {
+		when(communityDao.findById(1)).thenReturn(new Community(1, "eSports", "Post competitive gaming photos here!"));
 		MultipartFile file = mock(MultipartFile.class);
 		when(file.getBytes()).thenReturn(new byte[10]);
 		when(file.getContentType()).thenReturn("application/json");
@@ -63,7 +66,7 @@ public class PostServiceTest {
 	}
 	
 	@Test
-	public void addPost_bmpFormat() throws IOException, PostException, AddPostException {
+	public void addPost_bmpFormat() throws IOException, PostException, AddPostException, CommunityDoesNotExist {
 		MultipartFile file = mock(MultipartFile.class);
 		when(file.getBytes()).thenReturn(new byte[10]);
 		when(file.getContentType()).thenReturn("image/bmp");
@@ -82,7 +85,7 @@ public class PostServiceTest {
 	}
 	
 	@Test
-	public void addPost_jpgFormat() throws IOException, PostException, AddPostException {
+	public void addPost_jpgFormat() throws IOException, PostException, AddPostException, CommunityDoesNotExist {
 		MultipartFile file = mock(MultipartFile.class);
 		when(file.getBytes()).thenReturn(new byte[10]);
 		when(file.getContentType()).thenReturn("image/jpg");
@@ -101,7 +104,7 @@ public class PostServiceTest {
 	}
 	
 	@Test
-	public void addPost_jpegFormat() throws IOException, PostException, AddPostException {
+	public void addPost_jpegFormat() throws IOException, PostException, AddPostException, CommunityDoesNotExist {
 		MultipartFile file = mock(MultipartFile.class);
 		when(file.getBytes()).thenReturn(new byte[10]);
 		when(file.getContentType()).thenReturn("image/jpg");
@@ -120,7 +123,7 @@ public class PostServiceTest {
 	}
 	
 	@Test
-	public void addPost_pngFormat() throws IOException, PostException, AddPostException {
+	public void addPost_pngFormat() throws IOException, PostException, AddPostException, CommunityDoesNotExist {
 		MultipartFile file = mock(MultipartFile.class);
 		when(file.getBytes()).thenReturn(new byte[10]);
 		when(file.getContentType()).thenReturn("image/png");
@@ -139,7 +142,7 @@ public class PostServiceTest {
 	}
 	
 	@Test
-	public void addPost_gifFormat() throws IOException, PostException, AddPostException {
+	public void addPost_gifFormat() throws IOException, PostException, AddPostException, CommunityDoesNotExist {
 		MultipartFile file = mock(MultipartFile.class);
 		when(file.getBytes()).thenReturn(new byte[10]);
 		when(file.getContentType()).thenReturn("image/png");
@@ -158,7 +161,7 @@ public class PostServiceTest {
 	}
 	
 	@Test
-	public void addPost_tiffFormat() throws IOException, PostException, AddPostException {
+	public void addPost_tiffFormat() throws IOException, PostException, AddPostException, CommunityDoesNotExist {
 		MultipartFile file = mock(MultipartFile.class);
 		when(file.getBytes()).thenReturn(new byte[10]);
 		when(file.getContentType()).thenReturn("image/tiff");
@@ -177,7 +180,7 @@ public class PostServiceTest {
 	}
 	
 	@Test(expected = AddPostException.class)
-	public void addPost_nullInsert() throws IOException, PostException, AddPostException {
+	public void addPost_nullInsert() throws IOException, PostException, AddPostException, CommunityDoesNotExist {
 		MultipartFile file = mock(MultipartFile.class);
 		when(file.getBytes()).thenReturn(new byte[10]);
 		when(file.getContentType()).thenReturn("image/tiff");
@@ -189,7 +192,8 @@ public class PostServiceTest {
 	}
 	
 	@Test
-	public void getPosts_success() {
+	public void getPosts_success() throws PostException, CommunityDoesNotExist {
+		when(communityDao.findById(1)).thenReturn(new Community(1, "eSports", "Post competitive gaming photos here!"));
 		when(postDao.findAllInCommunity(eq(1))).thenReturn(Sets.newSet(new Post(1, new byte[10], "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L))));
@@ -204,7 +208,8 @@ public class PostServiceTest {
 	}
 	
 	@Test
-	public void getPosts_nullResults() {
+	public void getPosts_nullResults() throws PostException, CommunityDoesNotExist {
+		when(communityDao.findById(1)).thenReturn(new Community(1, "eSports", "Post competitive gaming photos here!"));
 		when(postDao.findAllInCommunity(eq(1))).thenReturn(null);
 		
 		Set<Post> actual = postService.getPosts(1);
@@ -214,8 +219,15 @@ public class PostServiceTest {
 		assertEquals(expected, actual);
 	}
 	
+	@Test(expected = CommunityDoesNotExist.class)
+	public void getPosts_nullCommunity() throws PostException, CommunityDoesNotExist {
+		when(communityDao.findById(1)).thenReturn(null);
+		
+		Set<Post> actual = postService.getPosts(1);
+	}
+	
 	@Test
-	public void getImage_success() throws GetImageException {
+	public void getImage_success() throws GetImageException, PostDoesNotExist {
 		when(postDao.findById(eq(1))).thenReturn(new Post(1, new byte[10], "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L)));
@@ -227,11 +239,9 @@ public class PostServiceTest {
 		assertTrue(Arrays.equals(expected, actual));
 	}
 	
-	@Test(expected = GetImageException.class)
-	public void getImage_noSuchPost() throws GetImageException {
-		when(postDao.findById(eq(1))).thenReturn(new Post(1, new byte[10], "This is a test post", 
-				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
-				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L)));
+	@Test(expected = PostDoesNotExist.class)
+	public void getImage_noSuchPost() throws GetImageException, PostDoesNotExist {
+		when(postDao.findById(eq(1))).thenReturn(null);
 		
 		byte[] actual = postService.getImage(100);
 		
