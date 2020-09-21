@@ -1,5 +1,7 @@
 package com.revature.dto;
 
+import java.sql.Timestamp;
+
 import com.revature.models.User;
 
 public class SendCommentDTO {
@@ -7,12 +9,14 @@ public class SendCommentDTO {
 	private int id;
 	private String text;
 	private User author;
+	private Timestamp timePosted;
 	
-	public SendCommentDTO(int id, String text, User author) {
+	public SendCommentDTO(int id, String text, User author, Timestamp timePosted) {
 		super();
 		this.id = id;
 		this.text = text;
 		this.author = author;
+		this.timePosted = timePosted;
 	}
 
 	public int getId() {
@@ -37,6 +41,14 @@ public class SendCommentDTO {
 
 	public void setAuthor(User author) {
 		this.author = author;
+	}
+
+	public Timestamp getTimePosted() {
+		return timePosted;
+	}
+
+	public void setTimePosted(Timestamp timePosted) {
+		this.timePosted = timePosted;
 	}
 	
 }

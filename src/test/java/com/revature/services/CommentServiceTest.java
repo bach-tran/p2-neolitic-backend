@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -50,14 +51,14 @@ public class CommentServiceTest {
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 				new Post(20, new byte[10], "animated gif", 
 						new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
-						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)))));
+						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)), new Timestamp(0L))));
 		
 		Set<Comment> actual = commentService.getCommentsFromPost(20);
 		Set<Comment> expected = Sets.newSet(new Comment(1, "Woah that's so cool! Nice one!", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 				new Post(20, new byte[10], "animated gif", 
 						new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
-						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L))));
+						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)), new Timestamp(0L)));
 		
 		assertEquals(expected, actual);
 	}
@@ -88,21 +89,21 @@ public class CommentServiceTest {
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 				new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)));
 		
-		when(commentDao.insertComment(eq(new Comment(0, "Woah that's so cool! Nice one!", 
+		when(commentDao.insertComment((new Comment(0, "Woah that's so cool! Nice one!", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 				new Post(20, new byte[10], "animated gif", 
 						new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
-						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)))))).thenReturn(new Comment(1, "Woah that's so cool! Nice one!", 
+						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)), any())))).thenReturn(new Comment(1, "Woah that's so cool! Nice one!", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 				new Post(20, new byte[10], "animated gif", 
 						new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
-						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L))));
+						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)), new Timestamp(0L)));
 		
 		Comment expected = new Comment(1, "Woah that's so cool! Nice one!", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 				new Post(20, new byte[10], "animated gif", 
 						new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
-						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)));
+						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)), new Timestamp(0L));
 		
 		Comment actual = commentService.addCommentToPost(20, "Woah that's so cool! Nice one!", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")));
@@ -128,13 +129,13 @@ public class CommentServiceTest {
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 				new Post(20, new byte[10], "animated gif", 
 						new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
-						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)))))).thenReturn(null);
+						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)), new Timestamp(0L))))).thenReturn(null);
 		
 		Comment expected = new Comment(1, "Woah that's so cool! Nice one!", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 				new Post(20, new byte[10], "animated gif", 
 						new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
-						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)));
+						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)), new Timestamp(0L));
 		
 		Comment actual = commentService.addCommentToPost(20, "Woah that's so cool! Nice one!", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")));
