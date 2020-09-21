@@ -42,8 +42,8 @@ public class DatabaseSetup {
 		
 		tx = s.beginTransaction();
 		
-		Post newPost = new Post(0, new byte[10], "This is a fake picture", s.get(User.class, 1), s.get(Community.class, 1), new Timestamp(System.currentTimeMillis()));
-		s.persist(newPost);
+//		Post newPost = new Post(0, new byte[10], "This is a fake picture", s.get(User.class, 1), s.get(Community.class, 1), new Timestamp(System.currentTimeMillis()));
+//		s.persist(newPost);
 //		s.get(Community.class, 1).getPosts().add(newPost);
 //		
 //		
