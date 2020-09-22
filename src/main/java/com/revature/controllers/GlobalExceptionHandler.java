@@ -40,6 +40,8 @@ public class GlobalExceptionHandler {
 		}
 		
 		log.error(ex.getMessage());
+		
+		HibernateUtility.closeSession();
 	}
 	
 	@ExceptionHandler({PostDoesNotExist.class, CommunityDoesNotExist.class})
@@ -50,6 +52,8 @@ public class GlobalExceptionHandler {
 		}
 		
 		log.error(ex.getMessage());
+		
+		HibernateUtility.closeSession();
 	}
 	
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
@@ -67,5 +71,6 @@ public class GlobalExceptionHandler {
                 (ex.getClass(), ResponseStatus.class) != null)
 			throw ex;
 		
+		HibernateUtility.closeSession();
 	}
 }

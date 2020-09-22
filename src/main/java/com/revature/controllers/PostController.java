@@ -33,6 +33,7 @@ import com.revature.exceptions.PostException;
 import com.revature.models.Post;
 import com.revature.models.User;
 import com.revature.services.PostService;
+import com.revature.util.HibernateUtility;
 
 @Controller
 public class PostController {
@@ -58,6 +59,8 @@ public class PostController {
 					post.getAuthor().getRole());
 			postsDto.add(new SendPostDTO(post.getId(), post.getCaption(), blankPasswordAuthor, post.getTimePosted()));
 		}
+		
+		HibernateUtility.closeSession();
 		
 		return ResponseEntity.ok(postsDto);
 	}
@@ -86,6 +89,8 @@ public class PostController {
 		
 		dto = new SendPostDTO(post.getId(), post.getCaption(), post.getAuthor(), post.getTimePosted());
 		
+		HibernateUtility.closeSession();
+		
 		return ResponseEntity.ok(dto);
 	}
 	
@@ -98,6 +103,8 @@ public class PostController {
 		String contentType = tika.detect(image);
 		
 		MediaType type = MediaType.parseMediaType(contentType);
+		
+		HibernateUtility.closeSession();
 		
 		return ResponseEntity.ok().contentType(type).body(image);
 	}

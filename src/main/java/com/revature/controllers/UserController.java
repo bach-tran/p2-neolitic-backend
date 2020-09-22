@@ -19,6 +19,7 @@ import com.revature.exceptions.LoginException;
 import com.revature.exceptions.RegistrationException;
 import com.revature.models.User;
 import com.revature.services.UserService;
+import com.revature.util.HibernateUtility;
 
 @Controller
 public class UserController {
@@ -61,6 +62,8 @@ public class UserController {
 		// Call login, which will also set currentUser to the user retrieved from the DAO
 		User user = userService.login(username, hashedPassword, session);
 		
+		HibernateUtility.closeSession();
+		
 		return ResponseEntity.ok(user);
 	}
 	
@@ -72,8 +75,10 @@ public class UserController {
 		HttpSession session = req.getSession();
 		
 		if (userService.userLoggedIn(session)) {
+			HibernateUtility.closeSession();
 			return ResponseEntity.ok(userService.getCurrentUser(session));
 		} else {
+			HibernateUtility.closeSession();
 			return ResponseEntity.noContent().build();
 		}
 	
@@ -91,6 +96,8 @@ public class UserController {
 			log.info(userService.getCurrentUser(session).getUsername() + " has been logged out");
 			session.setAttribute("currentUser", null);
 		}
+		
+		HibernateUtility.closeSession();
 		
 		return ResponseEntity.ok().build();
 	}
@@ -128,7 +135,9 @@ public class UserController {
 		User user = userService.registerAccount(firstName, lastName, username, hashedPassword);
 		
 		User loggedInUser = userService.login(user.getUsername(), user.getPassword(), session);
-				
+		
+		HibernateUtility.closeSession();
+		
 		return ResponseEntity.ok(loggedInUser);
 	}
 		

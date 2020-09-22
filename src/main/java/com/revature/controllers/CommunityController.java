@@ -19,6 +19,7 @@ import com.revature.exceptions.CommunityException;
 import com.revature.models.Community;
 import com.revature.services.CommunityService;
 import com.revature.services.UserService;
+import com.revature.util.HibernateUtility;
 
 @Controller
 public class CommunityController {
@@ -44,6 +45,8 @@ public class CommunityController {
 		
 		SendCommunityDTO sendDto = new SendCommunityDTO(c.getId(), c.getName(), c.getDescription());
 		
+		HibernateUtility.closeSession();
+		
 		return ResponseEntity.ok(sendDto);
 	}
 	
@@ -58,6 +61,8 @@ public class CommunityController {
 		for (Community community : communities) {
 			communitiesDto.add(new SendCommunityDTO(community.getId(), community.getName(), community.getDescription()));
 		}
+		
+		HibernateUtility.closeSession();
 		
 		return ResponseEntity.ok(communitiesDto);
 	}
