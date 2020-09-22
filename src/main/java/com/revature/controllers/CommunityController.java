@@ -45,8 +45,6 @@ public class CommunityController {
 		
 		SendCommunityDTO sendDto = new SendCommunityDTO(c.getId(), c.getName(), c.getDescription());
 		
-		HibernateUtility.closeSession();
-		
 		return ResponseEntity.ok(sendDto);
 	}
 	
@@ -61,8 +59,6 @@ public class CommunityController {
 		for (Community community : communities) {
 			communitiesDto.add(new SendCommunityDTO(community.getId(), community.getName(), community.getDescription()));
 		}
-		
-		HibernateUtility.closeSession();
 		
 		return ResponseEntity.ok(communitiesDto);
 	}
