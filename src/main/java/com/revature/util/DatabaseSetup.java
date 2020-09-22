@@ -35,7 +35,7 @@ public class DatabaseSetup {
 		
 		tx = s.beginTransaction();
 		
-		s.saveOrUpdate(new User(0, "bach_tran", "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad", "Bach", "Tran", new Role(2, "consumer")));
+		s.saveOrUpdate(new User(0, "bach_tran", "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad", "Bach", "Tran", new Role(1, "admin")));
 		s.saveOrUpdate(new Community(0, "Gaming", "For video games"));
 		
 		tx.commit();

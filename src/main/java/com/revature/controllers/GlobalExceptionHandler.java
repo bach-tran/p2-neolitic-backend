@@ -17,6 +17,7 @@ import com.revature.exceptions.AddCommentException;
 import com.revature.exceptions.AddPostException;
 import com.revature.exceptions.CommunityDoesNotExist;
 import com.revature.exceptions.CommunityException;
+import com.revature.exceptions.DeletePostException;
 import com.revature.exceptions.GetImageException;
 import com.revature.exceptions.LoginException;
 import com.revature.exceptions.PostDoesNotExist;
@@ -53,7 +54,7 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler(Exception.class)
+	@ExceptionHandler({Exception.class, DeletePostException.class})
 	public void allOtherExceptions(Exception ex) throws Exception {
 		log.error(ex.getMessage());
 		log.error("Unhandled exception encountered");
