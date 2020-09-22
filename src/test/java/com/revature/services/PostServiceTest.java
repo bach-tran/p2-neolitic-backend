@@ -249,4 +249,37 @@ public class PostServiceTest {
 		
 		assertTrue(Arrays.equals(expected, actual));
 	}
+	
+	@Test
+	public void deletePost_success() throws PostDoesNotExist {
+		when(postDao.findById(eq(1))).thenReturn(new Post(1, new byte[10], "This is a test post", 
+				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
+				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L)));
+		
+		when(postDao.deletePost(eq(new Post(1, new byte[10], "This is a test post", 
+				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
+				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L))))).thenReturn(true);
+		
+		assertTrue(postService.deletePost(1));
+	}
+	
+	@Test(expected = PostDoesNotExist.class)
+	public void deletePost_nullPost() throws PostDoesNotExist {
+		when(postDao.findById(eq(1))).thenReturn(null);
+		
+		postService.deletePost(1);
+	}
+	
+	@Test
+	public void deletePost_DaoException() throws PostDoesNotExist {
+		when(postDao.findById(eq(1))).thenReturn(new Post(1, new byte[10], "This is a test post", 
+				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
+				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L)));
+		
+		when(postDao.deletePost(eq(new Post(1, new byte[10], "This is a test post", 
+				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
+				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L))))).thenReturn(false);
+		
+		assertFalse(postService.deletePost(1));
+	}
 }
