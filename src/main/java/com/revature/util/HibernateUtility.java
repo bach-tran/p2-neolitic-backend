@@ -26,15 +26,15 @@ public class HibernateUtility {
 	}
 	
 	public static Session getSession() {
-		if(session == null || !session.isOpen()) {
-			session = sf.openSession();
-		}
+//		if(session == null || !session.isOpen()) {
+//			session = sf.openSession();
+//		}
 		
-		return session;
+		return sf.openSession();
 	}
 	
-	public static void closeSession() {
-		session.close();
-	}
+//	public static void closeSession() {
+//		session.close();
+//	}
 	
 }

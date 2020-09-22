@@ -31,6 +31,7 @@ public class CommentDAO implements ICommentDAO {
 		Stream<Comment> stream = q.getResultStream();
 		Set<Comment> comments = stream.collect(Collectors.toSet());
 		
+		session.close();
 		return comments;
 	}
 
@@ -42,9 +43,11 @@ public class CommentDAO implements ICommentDAO {
 		try {
 			s.saveOrUpdate(c);
 			tx.commit();
+			s.close();
 			return c;
 		} catch (Exception e) {
 			tx.rollback();
+			s.close();
 			return null;
 		}
 	}

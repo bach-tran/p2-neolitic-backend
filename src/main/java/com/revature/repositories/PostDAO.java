@@ -26,6 +26,7 @@ public class PostDAO implements IPostDAO{
 				.getResultStream()
 				.collect(Collectors.toList());
 		
+		s.close();
 		return result;
 	}
 
@@ -33,7 +34,12 @@ public class PostDAO implements IPostDAO{
 	@Override
 	public Post findById(int id) {
 		Session s = HibernateUtility.getSession();
-		return s.get(Post.class, id);
+		
+		Post p = s.get(Post.class, id);
+		
+		s.close();
+		
+		return p;
 	}
 
 	@Override
@@ -45,6 +51,7 @@ public class PostDAO implements IPostDAO{
 		
 		Post result = (Post) q.getSingleResult();
 		
+		s.close();
 		return result;
 	}
 
@@ -56,9 +63,13 @@ public class PostDAO implements IPostDAO{
 		try {
 			s.saveOrUpdate(p);
 			tx.commit();
+			
+			s.close();
 			return p;
 		} catch (Exception e) {
 			tx.rollback();
+			
+			s.close();
 			return null;
 		}
 	
@@ -79,6 +90,7 @@ public class PostDAO implements IPostDAO{
 		Stream<Post> stream = q.getResultStream();
 		Set<Post> posts = stream.collect(Collectors.toSet());
 		
+		s.close();
 		return posts;
 	}
 	
@@ -91,9 +103,12 @@ public class PostDAO implements IPostDAO{
 			
 			tx.commit();
 			
+			s.close();
 			return true;
 		} catch (Exception e) {
 			tx.rollback();
+			
+			s.close();
 			return false;
 		}
 		
