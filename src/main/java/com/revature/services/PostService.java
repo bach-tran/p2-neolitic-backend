@@ -48,8 +48,8 @@ public class PostService {
 		
 		Community c = communityDAO.findById(communityId);
 		if (c == null) {
-			log.error("Community attempting to add post to does not exist");
-			throw new CommunityDoesNotExist("Community attempting to add post to does not exist");
+			log.error("Community attempting to add post to does not exist: " + communityId);
+			throw new CommunityDoesNotExist("Community attempting to add post to does not exist" + communityId);
 		}
 		
 		byte[] image = file.getBytes();
@@ -78,8 +78,8 @@ public class PostService {
 		
 		Community c = communityDAO.findById(communityId);
 		if (c == null) {
-			log.error("Community attempting to find posts from does not exist");
-			throw new CommunityDoesNotExist("Community attempting to find posts from does not exist");
+			log.error("Community attempting to find posts from does not exist " + communityId);
+			throw new CommunityDoesNotExist("Community attempting to find posts from does not exist" + communityId);
 		}
 		
 		Set<Post> posts = postDAO.findAllInCommunity(communityId);
@@ -96,7 +96,7 @@ public class PostService {
 		Post post = postDAO.findById(postId);
 		
 		if (post == null) {
-			throw new PostDoesNotExist("No such post ID exists");
+			throw new PostDoesNotExist("No such post ID exists: " + postId);
 		} 
 		
 		byte[] image = post.getImage();
@@ -104,7 +104,13 @@ public class PostService {
 		
 	}
 	
-	public boolean deletePost(int postId) {
-		return postDAO.deletePost(postId);
+	public boolean deletePost(int postId) throws PostDoesNotExist {
+		Post post = postDAO.findById(postId);
+		
+		if (post == null) {
+			throw new PostDoesNotExist("No such post ID exists to delete: " + postId);
+		}
+		
+		return postDAO.deletePost(post);
 	}
 }
