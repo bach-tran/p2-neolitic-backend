@@ -26,9 +26,9 @@ public class HibernateUtility {
 	}
 	
 	public static Session getSession() {
-		if(session == null || !session.isOpen()) {
+//		if(session == null || !session.isOpen()) {
 			session = sf.openSession();
-		}
+//		}
 		
 		return session;
 	}
