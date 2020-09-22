@@ -45,7 +45,7 @@ public class PostController {
 	private Tika tika;
 	
 	private static Logger log = Logger.getLogger(PostController.class);
-		
+	
 	@AuthorizedConsumer
 	@RequestMapping(value = "/post", method = RequestMethod.GET)
 	public ResponseEntity<Set<SendPostDTO>> getPostsInCommunity(@RequestParam int communityId) throws CommunityDoesNotExist {
@@ -59,8 +59,6 @@ public class PostController {
 					post.getAuthor().getRole());
 			postsDto.add(new SendPostDTO(post.getId(), post.getCaption(), blankPasswordAuthor, post.getTimePosted()));
 		}
-		
-		HibernateUtility.closeSession();
 		
 		return ResponseEntity.ok(postsDto);
 	}
@@ -89,8 +87,6 @@ public class PostController {
 		
 		dto = new SendPostDTO(post.getId(), post.getCaption(), post.getAuthor(), post.getTimePosted());
 		
-		HibernateUtility.closeSession();
-		
 		return ResponseEntity.ok(dto);
 	}
 	
@@ -103,8 +99,6 @@ public class PostController {
 		String contentType = tika.detect(image);
 		
 		MediaType type = MediaType.parseMediaType(contentType);
-		
-		HibernateUtility.closeSession();
 		
 		return ResponseEntity.ok().contentType(type).body(image);
 	}
