@@ -25,13 +25,17 @@ public class CommunityDAO implements ICommunityDAO{
 				.getResultStream()
 				.collect(Collectors.toSet());
 		
+		s.close();
 		return result;
 	}
 
 	@Override
 	public Community findById(int id) {
 		Session s = HibernateUtility.getSession();
-		return s.get(Community.class, id);
+		Community community = s.get(Community.class, id);
+		
+		s.close();
+		return community;
 	}
 
 	@Override
@@ -43,9 +47,10 @@ public class CommunityDAO implements ICommunityDAO{
 		
 		try {
 			Community result = (Community) q.getSingleResult();
-			
+			s.close();
 			return result;
 		} catch(NoResultException e) {
+			s.close();
 			return null;
 		}
 	}
@@ -59,10 +64,12 @@ public class CommunityDAO implements ICommunityDAO{
 		
 		if(id != null && !(id == 0)) {
 			tx.commit();
+			s.close();
 			return c;
 		}
 		
 		tx.rollback();
+		s.close();
 		return null;
 	}
 

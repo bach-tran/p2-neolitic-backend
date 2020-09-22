@@ -67,7 +67,7 @@ public class DatabaseSetup {
 //        // Close the file 
 //        os.close(); 
 //		
-		HibernateUtility.closeSession();
+		s.close();
 	}
 	
 }

@@ -22,11 +22,9 @@ import com.revature.util.HibernateUtility;
 @Repository
 public class UserDAO implements IUserDAO {
 	
-	private Session session = HibernateUtility.getSession();
-	
 	@Override
 	public User login(String username, String hashedPassword) throws LoginException {	
-		
+		Session session = HibernateUtility.getSession();
 		session.clear();
 		
 		CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -42,14 +40,17 @@ public class UserDAO implements IUserDAO {
 		
 		List<User> list = query.getResultList();
 		if (list == null || list.isEmpty()) {
+			session.close();
 			return null;
 		}
 		
+		session.close();
 		return list.get(0);
 	}
 	
 	@Override
 	public User register(User u) throws RegistrationException {
+		Session session = HibernateUtility.getSession();
 		Transaction tx = session.beginTransaction();
 		
 		Query query = session.createQuery("FROM User u WHERE u.username = :username");
@@ -57,6 +58,7 @@ public class UserDAO implements IUserDAO {
 		List<User> prexistingUser = query.getResultList();
 		if (prexistingUser.size() == 1) {
 			tx.rollback();
+			session.close();
 			throw new RegistrationException("User already exists");
 		}
 		
@@ -65,12 +67,15 @@ public class UserDAO implements IUserDAO {
 			tx.commit();
 		} catch(EntityExistsException e) {
 			tx.rollback();
+			session.close();
 			throw new RegistrationException("User already exists");
 		} catch (Exception e) {
 			tx.rollback();
+			session.close();
 			throw(e);
 		}
 		
+		session.close();
 		return u;
 	}
 
