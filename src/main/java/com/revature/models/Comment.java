@@ -2,6 +2,7 @@ package com.revature.models;
 
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -31,7 +35,8 @@ public class Comment {
 	@JoinColumn(name = "user_id")
 	private User author;
 	
-	@ManyToOne
+	@ManyToOne()
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "post_id")
 	private Post post;
 	

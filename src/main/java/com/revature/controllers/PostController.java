@@ -23,10 +23,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.revature.annotations.AuthorizedAdmin;
 import com.revature.annotations.AuthorizedConsumer;
 import com.revature.dto.SendPostDTO;
 import com.revature.exceptions.AddPostException;
 import com.revature.exceptions.CommunityDoesNotExist;
+import com.revature.exceptions.DeletePostException;
 import com.revature.exceptions.GetImageException;
 import com.revature.exceptions.PostDoesNotExist;
 import com.revature.exceptions.PostException;
@@ -90,9 +92,11 @@ public class PostController {
 		return ResponseEntity.ok(dto);
 	}
 	
-//	@AuthorizedConsumer
+	@AuthorizedConsumer
 	@RequestMapping(value = "/post/image/{ID}", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getImage(@PathVariable(value="ID") int postId, HttpServletResponse resp) throws PostDoesNotExist, GetImageException {
+		
+		log.info("getImage method invoked");
 		
 		byte[] image = postService.getImage(postId);
 		
@@ -101,6 +105,19 @@ public class PostController {
 		MediaType type = MediaType.parseMediaType(contentType);
 		
 		return ResponseEntity.ok().contentType(type).body(image);
+	}
+	
+	@AuthorizedAdmin
+	@RequestMapping(value = "/post/{ID}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> deletePost(@PathVariable(value="ID") int postId) throws PostDoesNotExist, DeletePostException {
+		
+		log.info("deletePost method invoked on postId " + postId);
+		
+		if (!postService.deletePost(postId)) {
+			throw new DeletePostException("postId " + postId + " was unable to be deleted");
+		}
+		
+		return ResponseEntity.ok().build();
 	}
 
 }
