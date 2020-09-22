@@ -81,5 +81,22 @@ public class PostDAO implements IPostDAO{
 		
 		return posts;
 	}
+	
+	@Override
+	public boolean deletePost(int id) {
+		Session s = HibernateUtility.getSession();
+		Transaction tx = s.beginTransaction();
+		
+		Post post = s.get(Post.class, id);
+		if (post == null) {
+			return false;
+		}
+		
+		s.remove(post);
+		
+		tx.commit();
+		
+		return true;
+	}
 
 }

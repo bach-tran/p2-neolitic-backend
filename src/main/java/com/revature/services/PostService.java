@@ -103,4 +103,8 @@ public class PostService {
 		return image;
 		
 	}
+	
+	public boolean deletePost(int postId) {
+		return postDAO.deletePost(postId);
+	}
 }
