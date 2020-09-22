@@ -28,6 +28,7 @@ import com.revature.models.Comment;
 import com.revature.models.Post;
 import com.revature.models.User;
 import com.revature.services.CommentService;
+import com.revature.util.HibernateUtility;
 
 @Controller
 public class CommentController {
@@ -51,6 +52,8 @@ public class CommentController {
 			commentDto.add(new SendCommentDTO(comment.getId(), comment.getText(), blankPasswordAuthor, comment.getTimePosted()));
 		}
 		
+		HibernateUtility.closeSession();
+		
 		return ResponseEntity.ok(commentDto);
 	}
 	
@@ -71,6 +74,8 @@ public class CommentController {
 		comment = commentService.addCommentToPost(dto.getPostId(), dto.getText(), user);
 		
 		SendCommentDTO sendDto = new SendCommentDTO(comment.getId(), comment.getText(), comment.getAuthor(), comment.getTimePosted());
+		
+		HibernateUtility.closeSession();
 		
 		return ResponseEntity.ok(sendDto);
 	}
