@@ -27,16 +27,20 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private HttpServletRequest req;
+	
 	private static Logger log = Logger.getLogger(UserController.class);
 	
 	@RequestMapping(value = "/user/login", method = RequestMethod.POST)
-	public ResponseEntity<User> login(@RequestBody LoginDTO dto, HttpServletRequest req) throws LoginException {
-			
+	public ResponseEntity<User> login(@RequestBody LoginDTO dto) throws LoginException {
+		
 		log.info("login method invoked");
 		
 		HttpSession session = req.getSession();
 		if (userService.userLoggedIn(session)) {
-			throw new LoginException(userService.getCurrentUser(session).getUsername() + " is already logged into this session");
+			User alreadyLoggedInUser = userService.getCurrentUser(session);
+			throw new LoginException(alreadyLoggedInUser.getUsername() + " is already logged into this session");
 		}
 		
 		String username = dto.getUsername();
@@ -46,7 +50,7 @@ public class UserController {
 		if (username.equals("") || username == null || password.equals("") || password == null) {
 			throw new LoginException("Username and/or Password was not provided or unable to be retrieved");
 		}
-		
+				
 		byte[] hashedArray;
 		String hashedPassword;
 		try {
@@ -66,7 +70,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/user/current", method = RequestMethod.GET)
-	public ResponseEntity<User> checkCurrentUser(HttpServletRequest req) {
+	public ResponseEntity<User> checkCurrentUser() {
 		
 		log.info("checkLoggedIn method invoked");
 		
@@ -81,7 +85,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/user/logout", method=RequestMethod.GET)
-	public ResponseEntity<?> logout(HttpServletRequest req) {
+	public ResponseEntity<?> logout() {
 		log.info("logout method invoked");
 		
 		HttpSession session = req.getSession();
@@ -97,7 +101,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/user/register", method = RequestMethod.POST)
-	public ResponseEntity<User> register(@RequestBody RegisterDTO dto, HttpServletRequest req) throws RegistrationException, LoginException {
+	public ResponseEntity<User> register(@RequestBody RegisterDTO dto) throws RegistrationException, LoginException {
 		log.info("register method invoked");
 		
 		HttpSession session = req.getSession();
