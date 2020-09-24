@@ -85,7 +85,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/user/logout", method=RequestMethod.GET)
-	public ResponseEntity<?> logout() {
+	public ResponseEntity<Void> logout() {
 		log.info("logout method invoked");
 		
 		HttpSession session = req.getSession();
@@ -93,7 +93,8 @@ public class UserController {
 		if (!userService.userLoggedIn(session)) {
 			log.info("currentUser not found for session");
 		} else {
-			log.info(userService.getCurrentUser(session).getUsername() + " has been logged out");
+			User currentUser = userService.getCurrentUser(session);
+			log.info(currentUser.getUsername() + " has been logged out");
 			session.setAttribute("currentUser", null);
 		}
 		
@@ -106,9 +107,10 @@ public class UserController {
 		
 		HttpSession session = req.getSession();
 		if (userService.userLoggedIn(session)) {
-			throw new RegistrationException("Cannot register while " + userService.getCurrentUser(session).getUsername() + " is already logged in.");
+			User alreadyLoggedInUser = userService.getCurrentUser(session);
+			throw new RegistrationException("Cannot register while " + alreadyLoggedInUser.getUsername() + " is already logged in.");
 		}
-				
+		
 		String firstName = dto.getFirstName();
 		String lastName = dto.getLastName();
 		String username = dto.getUsername();
@@ -131,9 +133,9 @@ public class UserController {
 		}
 		
 		User user = userService.registerAccount(firstName, lastName, username, hashedPassword);
-		
+		System.out.println(user);
 		User loggedInUser = userService.login(user.getUsername(), user.getPassword(), session);
-		
+		System.out.println(loggedInUser);
 		return ResponseEntity.ok(loggedInUser);
 	}
 		
