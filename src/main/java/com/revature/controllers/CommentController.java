@@ -35,6 +35,9 @@ public class CommentController {
 
 	@Autowired
 	private CommentService commentService;
+	
+	@Autowired
+	private HttpServletRequest req;
 
 	private static Logger log = Logger.getLogger(CommentController.class);
 	
@@ -57,14 +60,14 @@ public class CommentController {
 	
 	@AuthorizedConsumer
 	@RequestMapping(value = "/comment", method = RequestMethod.POST)
-	public ResponseEntity<SendCommentDTO> addCommentToPost(@RequestBody AddCommentDTO dto, HttpServletRequest req) throws PostException, AddPostException, PostDoesNotExist, AddCommentException {
+	public ResponseEntity<SendCommentDTO> addCommentToPost(@RequestBody AddCommentDTO dto) throws PostException, AddPostException, PostDoesNotExist, AddCommentException {
 		
 		log.info("addCommentToPost method invoked");
 		
 		User user = (User) req.getSession().getAttribute("currentUser");
 		
 		if (user == null) {
-			throw new AddPostException("Unable to associate post with a user");
+			throw new AddPostException("Unable to associate comment with a user");
 		}
 		
 		Comment comment;
