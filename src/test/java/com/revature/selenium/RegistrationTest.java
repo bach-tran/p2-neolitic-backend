@@ -7,8 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-public class LoginTest {
-
+public class RegistrationTest {
+	
 	public static void main(String[] args) {
 		String os = System.getProperty("os.name").toLowerCase();
 		
@@ -29,13 +29,23 @@ public class LoginTest {
 		//driver.get("http://localhost:4200/login");
 		
 		try {
+			
+			WebElement signUpButton = driver.findElement(By.id("signup"));
+			signUpButton.click();
+			WebElement fname = driver.findElement(By.id("fname"));
+			WebElement lname = driver.findElement(By.id("lname"));
 			WebElement username = driver.findElement(By.id("username"));
 			WebElement password = driver.findElement(By.id("password"));
+			WebElement cpassword = driver.findElement(By.id("cpassword"));
 			WebElement submitButton = driver.findElement(By.id("submit"));
-			
+
+			fname.sendKeys("Selenium");
+			lname.sendKeys("Test");
 			username.sendKeys("stest");
 			password.sendKeys("1234");
+			cpassword.sendKeys("1234");
 			submitButton.click();
+			
 			
 		}
 		catch (Exception e)
@@ -46,4 +56,5 @@ public class LoginTest {
 		driver.close();
 
 		}
+
 }
