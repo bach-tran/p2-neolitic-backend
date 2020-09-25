@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.tika.Tika;
@@ -46,6 +47,12 @@ public class PostController {
 	@Autowired
 	private Tika tika;
 	
+	@Autowired
+	HttpServletResponse resp;
+	
+	@Autowired
+	HttpServletRequest req;
+	
 	private static Logger log = Logger.getLogger(PostController.class);
 	
 	@AuthorizedConsumer
@@ -68,11 +75,12 @@ public class PostController {
 	@AuthorizedConsumer
 	@RequestMapping(value = "/post", method = RequestMethod.POST)
 	public ResponseEntity<SendPostDTO> addPostToCommunity(@RequestParam("communityId") int communityId, @RequestParam("caption") String caption, 
-			@RequestParam("file") MultipartFile file, HttpServletRequest req) throws AddPostException, CommunityDoesNotExist {
+			@RequestParam("file") MultipartFile file) throws AddPostException, CommunityDoesNotExist {
 		
 		log.info("addPostToCommunity method invoked");
 		
-		User user = (User) req.getSession().getAttribute("currentUser");
+		HttpSession session = req.getSession();
+		User user = (User) session.getAttribute("currentUser");
 		
 		if (user == null) {
 			throw new AddPostException("Unable to associate post with a user");
@@ -94,7 +102,7 @@ public class PostController {
 	
 	@AuthorizedConsumer
 	@RequestMapping(value = "/post/image/{ID}", method = RequestMethod.GET)
-	public ResponseEntity<byte[]> getImage(@PathVariable(value="ID") int postId, HttpServletResponse resp) throws PostDoesNotExist, GetImageException {
+	public ResponseEntity<byte[]> getImage(@PathVariable(value="ID") int postId) throws PostDoesNotExist, GetImageException {
 		
 		log.info("getImage method invoked");
 		
