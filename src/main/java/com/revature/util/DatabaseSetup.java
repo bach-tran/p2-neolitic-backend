@@ -25,22 +25,22 @@ public class DatabaseSetup {
 		Session s = HibernateUtility.getSession();
 		
 		Transaction tx = s.beginTransaction();
+//		
+//		s.saveOrUpdate(new Role(1, "admin"));
+//		s.saveOrUpdate(new Role(2, "consumer"));
+//		
+//		tx.commit();
+//		
+//		s.clear();
 		
-		s.saveOrUpdate(new Role(1, "admin"));
-		s.saveOrUpdate(new Role(2, "consumer"));
+//		tx = s.beginTransaction();
+//		
+//		s.saveOrUpdate(new User(0, "bach_tran", "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad", "Bach", "Tran", new Role(1, "admin")));
+//		s.saveOrUpdate(new Community(0, "Gaming", "For video games"));
+//		
+//		tx.commit();
 		
-		tx.commit();
-		
-		s.clear();
-		
-		tx = s.beginTransaction();
-		
-		s.saveOrUpdate(new User(0, "bach_tran", "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad", "Bach", "Tran", new Role(1, "admin")));
-		s.saveOrUpdate(new Community(0, "Gaming", "For video games"));
-		
-		tx.commit();
-		
-		tx = s.beginTransaction();
+//		tx = s.beginTransaction();
 		
 //		Post newPost = new Post(0, new byte[10], "This is a fake picture", s.get(User.class, 1), s.get(Community.class, 1), new Timestamp(System.currentTimeMillis()));
 //		s.persist(newPost);

@@ -25,10 +25,7 @@ public class Post implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	@Column(nullable = false)
-	private byte[] image;
-	
+		
 	@Column(nullable = false)
 	private String caption;
 	
@@ -43,10 +40,9 @@ public class Post implements Serializable {
 	@Column(nullable = false)
 	private Timestamp timePosted;
 	
-	public Post(int id, byte[] image, String caption, User author, Community community, Timestamp timePosted) {
+	public Post(int id, String caption, User author, Community community, Timestamp timePosted) {
 		super();
 		this.id = id;
-		this.image = image;
 		this.caption = caption;
 		this.author = author;
 		this.community = community;
