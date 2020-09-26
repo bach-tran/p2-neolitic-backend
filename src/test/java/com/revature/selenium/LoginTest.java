@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class LoginTest {
 
@@ -26,8 +27,9 @@ public class LoginTest {
 			System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver");
 		}
 		
-
-		WebDriver driver=new ChromeDriver();
+		ChromeOptions chromeOptions = new ChromeOptions();
+		chromeOptions.addArguments("--headless", "window-size=1024,768", "--no-sandbox");
+		WebDriver driver=new ChromeDriver(chromeOptions);
 		
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
