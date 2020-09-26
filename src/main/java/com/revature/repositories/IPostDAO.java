@@ -14,7 +14,7 @@ public interface IPostDAO {
 
 	public Post findById(int id);
 	
-	public Post findByAuthorId(int id);
+	public Set<Post> findByAuthorId(int id);
 	
 	public Post insertPost(Post p);
 	

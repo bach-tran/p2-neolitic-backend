@@ -23,6 +23,7 @@ import com.revature.exceptions.LoginException;
 import com.revature.exceptions.PostDoesNotExist;
 import com.revature.exceptions.PostException;
 import com.revature.exceptions.RegistrationException;
+import com.revature.exceptions.UserDoesNotExist;
 import com.revature.util.HibernateUtility;
 
 @ControllerAdvice
@@ -43,7 +44,7 @@ public class GlobalExceptionHandler {
 		log.error(ex.getMessage());
 	}
 	
-	@ExceptionHandler({PostDoesNotExist.class, CommunityDoesNotExist.class})
+	@ExceptionHandler({PostDoesNotExist.class, CommunityDoesNotExist.class, UserDoesNotExist.class})
 	public void notFoundException(Exception ex) throws IOException {
 		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
 		if (response != null) {

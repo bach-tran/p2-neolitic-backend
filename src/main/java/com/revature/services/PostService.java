@@ -24,11 +24,13 @@ import com.revature.exceptions.CommunityDoesNotExist;
 import com.revature.exceptions.GetImageException;
 import com.revature.exceptions.PostDoesNotExist;
 import com.revature.exceptions.PostException;
+import com.revature.exceptions.UserDoesNotExist;
 import com.revature.models.Community;
 import com.revature.models.Post;
 import com.revature.models.User;
 import com.revature.repositories.ICommunityDAO;
 import com.revature.repositories.IPostDAO;
+import com.revature.repositories.IUserDAO;
 import com.revature.util.AmazonClient;
 
 @Service
@@ -42,6 +44,9 @@ public class PostService {
 	
 	@Autowired
 	private ICommunityDAO communityDAO;
+	
+	@Autowired
+	private IUserDAO userDAO;
 	
 	private static Logger log = Logger.getLogger(PostService.class);
 	
@@ -129,5 +134,20 @@ public class PostService {
 		}
 		
 		return postDAO.deletePost(post);
+	}
+
+	public Set<Post> getPostsByUserId(int userId) throws UserDoesNotExist {
+		User u = userDAO.getUserById(userId);
+		if (u == null) {
+			log.error("User attempting to find posts from does not exist " + userId);
+			throw new UserDoesNotExist("User attempting to find posts from does not exist" + userId);
+		}
+		
+		Set<Post> posts = postDAO.findByAuthorId(u.getId());
+		if (posts == null) {
+			posts = new HashSet<>();
+		}
+		
+		return posts;
 	}
 }

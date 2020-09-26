@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.revature.models.Community;
 import com.revature.models.Post;
+import com.revature.models.User;
 import com.revature.util.HibernateUtility;
 
 @Repository
@@ -40,19 +41,6 @@ public class PostDAO implements IPostDAO{
 		s.close();
 		
 		return p;
-	}
-
-	@Override
-	public Post findByAuthorId(int id) {
-		Session s = HibernateUtility.getSession();
-		
-		Query q = s.createQuery("FROM Post p WHERE p.author = :author_id");
-		q.setParameter("author_id", id);
-		
-		Post result = (Post) q.getSingleResult();
-		
-		s.close();
-		return result;
 	}
 
 	@Override
@@ -86,6 +74,24 @@ public class PostDAO implements IPostDAO{
 		
 		Query q = s.createQuery("FROM Post p WHERE p.community = :community");
 		q.setParameter("community", c);
+		
+		Stream<Post> stream = q.getResultStream();
+		Set<Post> posts = stream.collect(Collectors.toSet());
+		
+		s.close();
+		return posts;
+	}
+	
+	@Override
+	public Set<Post> findByAuthorId(int id) {
+		Session s = HibernateUtility.getSession();
+		
+		s.clear();
+		
+		User u = s.get(User.class, id);
+		
+		Query q = s.createQuery("FROM Post p WHERE p.author = :author");
+		q.setParameter("author", u);
 		
 		Stream<Post> stream = q.getResultStream();
 		Set<Post> posts = stream.collect(Collectors.toSet());

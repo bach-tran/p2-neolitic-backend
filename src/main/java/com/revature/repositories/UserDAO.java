@@ -1,6 +1,8 @@
 package com.revature.repositories;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.NoResultException;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import com.revature.exceptions.LoginException;
 import com.revature.exceptions.RegistrationException;
+import com.revature.models.Community;
 import com.revature.models.User;
 import com.revature.util.HibernateUtility;
 
@@ -80,8 +83,25 @@ public class UserDAO implements IUserDAO {
 	}
 
 	@Override
-	public User getAllUsers() {
-		return null;
+	public Set<User> getAllUsers() {
+		Session s = HibernateUtility.getSession();
+		
+		Set<User> result = s.createQuery("FROM User u", User.class)
+				.getResultStream()
+				.collect(Collectors.toSet());
+		
+		s.close();
+		
+		return result;
+	}
+
+	@Override
+	public User getUserById(int userId) {
+		Session s = HibernateUtility.getSession();
+		User user = s.get(User.class, userId);
+		
+		s.close();
+		return user;
 	}
 
 }

@@ -33,6 +33,7 @@ import com.revature.exceptions.DeletePostException;
 import com.revature.exceptions.GetImageException;
 import com.revature.exceptions.PostDoesNotExist;
 import com.revature.exceptions.PostException;
+import com.revature.exceptions.UserDoesNotExist;
 import com.revature.models.Post;
 import com.revature.models.User;
 import com.revature.services.PostService;
@@ -56,11 +57,28 @@ public class PostController {
 	private static Logger log = Logger.getLogger(PostController.class);
 	
 	@AuthorizedConsumer
-	@RequestMapping(value = "/post", method = RequestMethod.GET)
+	@RequestMapping(value = "/post", method = RequestMethod.GET, params = "communityId")
 	public ResponseEntity<Set<SendPostDTO>> getPostsInCommunity(@RequestParam int communityId) throws CommunityDoesNotExist {
 		log.info("getPosts method invoked");
 		
 		Set<Post> posts = postService.getPosts(communityId);
+		
+		Set<SendPostDTO> postsDto = new HashSet<>();
+		for (Post post : posts) {
+			User blankPasswordAuthor = new User(post.getAuthor().getId(), post.getAuthor().getUsername(), "", post.getAuthor().getFirstName(), post.getAuthor().getLastName(),
+					post.getAuthor().getRole());
+			postsDto.add(new SendPostDTO(post.getId(), post.getCaption(), blankPasswordAuthor, post.getTimePosted()));
+		}
+		
+		return ResponseEntity.ok(postsDto);
+	}
+	
+	@AuthorizedConsumer
+	@RequestMapping(value = "/post", method = RequestMethod.GET, params = "userId")
+	public ResponseEntity<Set<SendPostDTO>> getPostsByUser(@RequestParam int userId) throws CommunityDoesNotExist, UserDoesNotExist {
+		log.info("getPosts method invoked");
+		
+		Set<Post> posts = postService.getPostsByUserId(userId);
 		
 		Set<SendPostDTO> postsDto = new HashSet<>();
 		for (Post post : posts) {
