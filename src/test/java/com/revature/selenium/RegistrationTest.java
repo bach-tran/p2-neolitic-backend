@@ -2,6 +2,7 @@ package com.revature.selenium;
 
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -17,6 +18,8 @@ public class RegistrationTest {
 		if (os.indexOf("win") >= 0)
 		{
 			System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
+		} else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0) {
+			System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver_linux");
 		}
 		else {
 			System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver");
@@ -55,7 +58,7 @@ public class RegistrationTest {
 			e.getStackTrace();
 		}
 		
-		//driver.close();
+		driver.close();
 
 		}
 
