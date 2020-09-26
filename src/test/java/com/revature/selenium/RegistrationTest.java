@@ -55,7 +55,7 @@ public class RegistrationTest {
 			e.getStackTrace();
 		}
 		
-		//driver.close();
+		driver.close();
 
 		}
 
