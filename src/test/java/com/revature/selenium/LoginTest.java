@@ -41,8 +41,8 @@ public class LoginTest {
 			WebElement password = driver.findElement(By.id("password"));
 			WebElement submitButton = driver.findElement(By.id("submit"));
 			
-			username.sendKeys("stest");
-			password.sendKeys("1234");
+			username.sendKeys("bach_tran");
+			password.sendKeys("abc");
 			submitButton.click();
 			
 		}
