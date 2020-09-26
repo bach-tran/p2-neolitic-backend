@@ -15,6 +15,7 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -31,16 +32,9 @@ public class AmazonClient {
 		
 	private final String bucketName = "neolitic";
 	
-	private final String accessKey = "AKIASOJED6US6XADRUSO";
-	
-	private final String secretKey = "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";
-	
 	@PostConstruct
-	public void initializeAmazon() {
-		AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
-		
-		this.s3client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials))
-				.withRegion(Regions.US_EAST_2).build();
+	public void initializeAmazon() {		
+		this.s3client = AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_2).build();
 	}
 	
 	public File convertMultipartToFile(MultipartFile file) throws IOException {
