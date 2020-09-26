@@ -2,6 +2,7 @@ package com.revature.selenium;
 
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,7 +10,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class RegistrationTest {
 	
-	public static void main(String[] args) {
+	@Test
+	public void registrationTest() {
 		String os = System.getProperty("os.name").toLowerCase();
 		
 		if (os.indexOf("win") >= 0)
@@ -53,7 +55,7 @@ public class RegistrationTest {
 			e.getStackTrace();
 		}
 		
-		driver.close();
+		//driver.close();
 
 		}
 
