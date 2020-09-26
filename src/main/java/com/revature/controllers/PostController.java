@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.revature.annotations.AuthorizedAdmin;
 import com.revature.annotations.AuthorizedConsumer;
+import com.revature.dto.SendPostCNameDTO;
 import com.revature.dto.SendPostDTO;
 import com.revature.exceptions.AddPostException;
 import com.revature.exceptions.CommunityDoesNotExist;
@@ -75,16 +76,16 @@ public class PostController {
 	
 	@AuthorizedConsumer
 	@RequestMapping(value = "/post", method = RequestMethod.GET, params = "userId")
-	public ResponseEntity<Set<SendPostDTO>> getPostsByUser(@RequestParam int userId) throws CommunityDoesNotExist, UserDoesNotExist {
+	public ResponseEntity<Set<SendPostCNameDTO>> getPostsByUser(@RequestParam int userId) throws CommunityDoesNotExist, UserDoesNotExist {
 		log.info("getPosts method invoked");
 		
 		Set<Post> posts = postService.getPostsByUserId(userId);
 		
-		Set<SendPostDTO> postsDto = new HashSet<>();
+		Set<SendPostCNameDTO> postsDto = new HashSet<>();
 		for (Post post : posts) {
 			User blankPasswordAuthor = new User(post.getAuthor().getId(), post.getAuthor().getUsername(), "", post.getAuthor().getFirstName(), post.getAuthor().getLastName(),
 					post.getAuthor().getRole());
-			postsDto.add(new SendPostDTO(post.getId(), post.getCaption(), blankPasswordAuthor, post.getTimePosted()));
+			postsDto.add(new SendPostCNameDTO(post.getId(), post.getCaption(), blankPasswordAuthor, post.getTimePosted(), post.getCommunity().getName()));
 		}
 		
 		return ResponseEntity.ok(postsDto);
