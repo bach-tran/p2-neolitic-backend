@@ -30,9 +30,10 @@ public class AmazonClient {
 	
 	public File convertMultipartToFile(MultipartFile file) throws IOException {
 		File convertedFile = new File(file.getOriginalFilename());
-		FileOutputStream fos = new FileOutputStream(convertedFile);
-		fos.write(file.getBytes());
-		fos.close();
+		try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
+			fos.write(file.getBytes());
+			fos.close();
+		}
 		
 		return convertedFile;
 	}
