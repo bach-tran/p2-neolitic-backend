@@ -1,7 +1,6 @@
 package com.revature.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -11,11 +10,6 @@ import org.apache.tika.io.IOUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -32,8 +26,7 @@ public class AmazonClient {
 		
 	private final String bucketName = "neolitic";
 	
-	@PostConstruct
-	public void initializeAmazon() {		
+	public AmazonClient() {		
 		this.s3client = AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_2).build();
 	}
 	
