@@ -44,19 +44,19 @@ public class CommentServiceTest {
 	
 	@Test
 	public void getCommentsFromPost_success() throws PostDoesNotExist {
-		when(postDao.findById(20)).thenReturn(new Post(20, new byte[10], "animated gif", 
+		when(postDao.findById(20)).thenReturn(new Post(20, "animated gif", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 				new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)));
 		when(commentDao.findAllInPost(eq(20))).thenReturn(Sets.newSet(new Comment(1, "Woah that's so cool! Nice one!", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
-				new Post(20, new byte[10], "animated gif", 
+				new Post(20, "animated gif", 
 						new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)), new Timestamp(0L))));
 		
 		Set<Comment> actual = commentService.getCommentsFromPost(20);
 		Set<Comment> expected = Sets.newSet(new Comment(1, "Woah that's so cool! Nice one!", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
-				new Post(20, new byte[10], "animated gif", 
+				new Post(20, "animated gif", 
 						new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)), new Timestamp(0L)));
 		
@@ -65,7 +65,7 @@ public class CommentServiceTest {
 	
 	@Test
 	public void getCommentsFromPost_null() throws PostDoesNotExist {
-		when(postDao.findById(20)).thenReturn(new Post(20, new byte[10], "animated gif", 
+		when(postDao.findById(20)).thenReturn(new Post(20, "animated gif", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 				new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)));
 		when(commentDao.findAllInPost(eq(20))).thenReturn(null);
@@ -85,23 +85,23 @@ public class CommentServiceTest {
 	
 	@Test
 	public void addCommentToPost_successful() throws PostDoesNotExist, AddCommentException {
-		when(postDao.findById(20)).thenReturn(new Post(20, new byte[10], "animated gif", 
+		when(postDao.findById(20)).thenReturn(new Post(20, "animated gif", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 				new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)));
 		
 		when(commentDao.insertComment((new Comment(0, "Woah that's so cool! Nice one!", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
-				new Post(20, new byte[10], "animated gif", 
+				new Post(20, "animated gif", 
 						new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)), any())))).thenReturn(new Comment(1, "Woah that's so cool! Nice one!", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
-				new Post(20, new byte[10], "animated gif", 
+				new Post(20, "animated gif", 
 						new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)), new Timestamp(0L)));
 		
 		Comment expected = new Comment(1, "Woah that's so cool! Nice one!", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
-				new Post(20, new byte[10], "animated gif", 
+				new Post(20, "animated gif", 
 						new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)), new Timestamp(0L));
 		
@@ -121,19 +121,19 @@ public class CommentServiceTest {
 	
 	@Test(expected = AddCommentException.class)
 	public void addCommentToPost_unsuccessfulInsertion() throws PostDoesNotExist, AddCommentException {
-		when(postDao.findById(20)).thenReturn(new Post(20, new byte[10], "animated gif", 
+		when(postDao.findById(20)).thenReturn(new Post(20, "animated gif", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 				new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)));
 		
 		when(commentDao.insertComment(eq(new Comment(0, "Woah that's so cool! Nice one!", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
-				new Post(20, new byte[10], "animated gif", 
+				new Post(20, "animated gif", 
 						new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)), new Timestamp(0L))))).thenReturn(null);
 		
 		Comment expected = new Comment(1, "Woah that's so cool! Nice one!", 
 				new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
-				new Post(20, new byte[10], "animated gif", 
+				new Post(20, "animated gif", 
 						new User(6, "bach_tran", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Bach", "Tran", new Role(1, "admin")), 
 						new Community(1, "Gaming", "For Video Games"), new Timestamp(0L)), new Timestamp(0L));
 		

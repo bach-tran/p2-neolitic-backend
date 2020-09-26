@@ -70,9 +70,7 @@ public class PostControllerTest {
 	@Test
 	public void getPostsInCommunity_success() throws Exception {
 		
-		byte[] mockImage = new byte[0];
-		
-		when(postService.getPosts(eq(1))).thenReturn(Sets.newSet(new Post(1, mockImage, "This is a bird", 
+		when(postService.getPosts(eq(1))).thenReturn(Sets.newSet(new Post(1, "This is a bird", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "Animals", "Post pictures of animals here!"), new Timestamp(0L))));
 		
@@ -97,7 +95,7 @@ public class PostControllerTest {
 		
 		when(postService.addPost(eq(1), eq("This is a bird"), eq(image), 
 				eq(new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")))))
-				.thenReturn(new Post(1, new byte[0], "This is a bird", 
+				.thenReturn(new Post(1, "This is a bird", 
 					new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 					new Community(1, "Animals", "Post pictures of animals here!"), new Timestamp(0L)));
 		
@@ -124,7 +122,7 @@ public class PostControllerTest {
 		
 		when(postService.addPost(eq(1), eq("This is a bird"), eq(image), 
 				eq(new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")))))
-				.thenReturn(new Post(1, new byte[0], "This is a bird", 
+				.thenReturn(new Post(1, "This is a bird", 
 					new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 					new Community(1, "Animals", "Post pictures of animals here!"), new Timestamp(0L)));
 		

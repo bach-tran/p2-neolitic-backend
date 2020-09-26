@@ -63,7 +63,7 @@ public class CommentControllerTest {
 		when(commentService.getCommentsFromPost(eq(1)))
 			.thenReturn(Sets.newSet(new Comment(1, "looks nice!", 
 			new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")),
-			new Post(1, new byte[0], "A dog", new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")),
+			new Post(1, "A dog", new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")),
 					new Community(1, "Animals", "Post animals here"), new Timestamp(0L)), new Timestamp(0L))));
 		
 		String expectedJson = new ObjectMapper().writeValueAsString(Sets.newSet(
@@ -96,7 +96,7 @@ public class CommentControllerTest {
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer"))))
 				.thenReturn(new Comment(1, "looks nice!", 
 						new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
-						new Post(1, new byte[0], "A dog", new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")),
+						new Post(1, "A dog", new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")),
 								new Community(1, "Animals", "Post animals here"), new Timestamp(0L)), new Timestamp(0L)));
 		
 		String expectedJson = new ObjectMapper()
@@ -122,7 +122,7 @@ public class CommentControllerTest {
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer"))))
 				.thenReturn(new Comment(1, "looks nice!", 
 						new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
-						new Post(1, new byte[0], "A dog", new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")),
+						new Post(1, "A dog", new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")),
 								new Community(1, "Animals", "Post animals here"), new Timestamp(0L)), new Timestamp(0L)));
 		
 		String expectedJson = new ObjectMapper()

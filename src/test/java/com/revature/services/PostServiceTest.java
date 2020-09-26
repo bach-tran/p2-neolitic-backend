@@ -30,11 +30,15 @@ import com.revature.models.Role;
 import com.revature.models.User;
 import com.revature.repositories.ICommunityDAO;
 import com.revature.repositories.IPostDAO;
+import com.revature.util.AmazonClient;
 
 public class PostServiceTest {
 	
 	@InjectMocks
 	private PostService postService;
+	
+	@Mock
+	private AmazonClient amazonS3Service;
 	
 	@Mock
 	private IPostDAO postDao;
@@ -72,12 +76,12 @@ public class PostServiceTest {
 		when(file.getContentType()).thenReturn("image/bmp");
 		
 		when(communityDao.findById(eq(1))).thenReturn(new Community(1, "eSports", "Post competitive gaming photos here!"));
-		when(postDao.insertPost(any())).thenReturn(new Post(1, new byte[10], "This is a test post", 
+		when(postDao.insertPost(any())).thenReturn(new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 						new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L)));
 		
 		Post actual = postService.addPost(1, "This is a test post", file, new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")));
-		Post expected = new Post(1, new byte[10], "This is a test post", 
+		Post expected = new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L));
 		
@@ -91,12 +95,12 @@ public class PostServiceTest {
 		when(file.getContentType()).thenReturn("image/jpg");
 		
 		when(communityDao.findById(eq(1))).thenReturn(new Community(1, "eSports", "Post competitive gaming photos here!"));
-		when(postDao.insertPost(any())).thenReturn(new Post(1, new byte[10], "This is a test post", 
+		when(postDao.insertPost(any())).thenReturn(new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 						new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L)));
 		
 		Post actual = postService.addPost(1, "This is a test post", file, new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")));
-		Post expected = new Post(1, new byte[10], "This is a test post", 
+		Post expected = new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L));
 		
@@ -110,12 +114,12 @@ public class PostServiceTest {
 		when(file.getContentType()).thenReturn("image/jpg");
 		
 		when(communityDao.findById(eq(1))).thenReturn(new Community(1, "eSports", "Post competitive gaming photos here!"));
-		when(postDao.insertPost(any())).thenReturn(new Post(1, new byte[10], "This is a test post", 
+		when(postDao.insertPost(any())).thenReturn(new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 						new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L)));
 		
 		Post actual = postService.addPost(1, "This is a test post", file, new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")));
-		Post expected = new Post(1, new byte[10], "This is a test post", 
+		Post expected = new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L));
 		
@@ -125,16 +129,16 @@ public class PostServiceTest {
 	@Test
 	public void addPost_pngFormat() throws IOException, PostException, AddPostException, CommunityDoesNotExist {
 		MultipartFile file = mock(MultipartFile.class);
-		when(file.getBytes()).thenReturn(new byte[10]);
+		
 		when(file.getContentType()).thenReturn("image/png");
 		
 		when(communityDao.findById(eq(1))).thenReturn(new Community(1, "eSports", "Post competitive gaming photos here!"));
-		when(postDao.insertPost(any())).thenReturn(new Post(1, new byte[10], "This is a test post", 
+		when(postDao.insertPost(any())).thenReturn(new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 						new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L)));
 		
 		Post actual = postService.addPost(1, "This is a test post", file, new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")));
-		Post expected = new Post(1, new byte[10], "This is a test post", 
+		Post expected = new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L));
 		
@@ -148,12 +152,12 @@ public class PostServiceTest {
 		when(file.getContentType()).thenReturn("image/png");
 		
 		when(communityDao.findById(eq(1))).thenReturn(new Community(1, "eSports", "Post competitive gaming photos here!"));
-		when(postDao.insertPost(any())).thenReturn(new Post(1, new byte[10], "This is a test post", 
+		when(postDao.insertPost(any())).thenReturn(new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 						new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L)));
 		
 		Post actual = postService.addPost(1, "This is a test post", file, new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")));
-		Post expected = new Post(1, new byte[10], "This is a test post", 
+		Post expected = new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L));
 		
@@ -167,12 +171,12 @@ public class PostServiceTest {
 		when(file.getContentType()).thenReturn("image/tiff");
 		
 		when(communityDao.findById(eq(1))).thenReturn(new Community(1, "eSports", "Post competitive gaming photos here!"));
-		when(postDao.insertPost(any())).thenReturn(new Post(1, new byte[10], "This is a test post", 
+		when(postDao.insertPost(any())).thenReturn(new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 						new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L)));
 		
 		Post actual = postService.addPost(1, "This is a test post", file, new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")));
-		Post expected = new Post(1, new byte[10], "This is a test post", 
+		Post expected = new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L));
 		
@@ -194,13 +198,13 @@ public class PostServiceTest {
 	@Test
 	public void getPosts_success() throws PostException, CommunityDoesNotExist {
 		when(communityDao.findById(1)).thenReturn(new Community(1, "eSports", "Post competitive gaming photos here!"));
-		when(postDao.findAllInCommunity(eq(1))).thenReturn(Sets.newSet(new Post(1, new byte[10], "This is a test post", 
+		when(postDao.findAllInCommunity(eq(1))).thenReturn(Sets.newSet(new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L))));
 		
 		Set<Post> actual = postService.getPosts(1);
 		
-		Set<Post> expected = Sets.newSet(new Post(1, new byte[10], "This is a test post", 
+		Set<Post> expected = Sets.newSet(new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L)));
 		
@@ -227,10 +231,12 @@ public class PostServiceTest {
 	}
 	
 	@Test
-	public void getImage_success() throws GetImageException, PostDoesNotExist {
-		when(postDao.findById(eq(1))).thenReturn(new Post(1, new byte[10], "This is a test post", 
+	public void getImage_success() throws GetImageException, PostDoesNotExist, IOException {
+		when(postDao.findById(eq(1))).thenReturn(new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L)));
+		
+		when(amazonS3Service.getFileFromS3Bucket(eq("post_1_image"))).thenReturn(new byte[10]);
 		
 		byte[] actual = postService.getImage(1);
 		
@@ -252,11 +258,11 @@ public class PostServiceTest {
 	
 	@Test
 	public void deletePost_success() throws PostDoesNotExist {
-		when(postDao.findById(eq(1))).thenReturn(new Post(1, new byte[10], "This is a test post", 
+		when(postDao.findById(eq(1))).thenReturn(new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L)));
 		
-		when(postDao.deletePost(eq(new Post(1, new byte[10], "This is a test post", 
+		when(postDao.deletePost(eq(new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L))))).thenReturn(true);
 		
@@ -272,11 +278,11 @@ public class PostServiceTest {
 	
 	@Test
 	public void deletePost_DaoException() throws PostDoesNotExist {
-		when(postDao.findById(eq(1))).thenReturn(new Post(1, new byte[10], "This is a test post", 
+		when(postDao.findById(eq(1))).thenReturn(new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L)));
 		
-		when(postDao.deletePost(eq(new Post(1, new byte[10], "This is a test post", 
+		when(postDao.deletePost(eq(new Post(1, "This is a test post", 
 				new User(1, "billy_bob", "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", "Billy", "Bob", new Role(2, "consumer")), 
 				new Community(1, "eSports", "Post competitive gaming photos here!"), new Timestamp(0L))))).thenReturn(false);
 		

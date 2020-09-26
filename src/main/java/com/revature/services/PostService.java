@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.revature.exceptions.AddPostException;
 import com.revature.exceptions.CommunityDoesNotExist;
 import com.revature.exceptions.GetImageException;
@@ -27,12 +29,16 @@ import com.revature.models.Post;
 import com.revature.models.User;
 import com.revature.repositories.ICommunityDAO;
 import com.revature.repositories.IPostDAO;
+import com.revature.util.AmazonClient;
 
 @Service
 public class PostService {
 
 	@Autowired
 	private IPostDAO postDAO;
+	
+	@Autowired
+	private AmazonClient amazonS3Service;
 	
 	@Autowired
 	private ICommunityDAO communityDAO;
@@ -52,7 +58,6 @@ public class PostService {
 			throw new CommunityDoesNotExist("Community attempting to add post to does not exist" + communityId);
 		}
 		
-		byte[] image = file.getBytes();
 		String contentType = file.getContentType();
 		MediaType mt = MediaType.parseMediaType(contentType);
 		
@@ -62,14 +67,18 @@ public class PostService {
 			throw new AddPostException("File upload does not correspond to jpeg, bmp, gif, png, or tiff");
 		}
 		
-		Post p = new Post(0, image, caption, user, c, timestamp);
+		Post p = new Post(0, caption, user, c, timestamp);
 		
 		Post insertedPost = postDAO.insertPost(p);
-		
+				
 		if(insertedPost == null) {
 			log.error("Post was not successfully inserted");
 			throw new AddPostException("Post was not successfully inserted.");
 		}
+		
+		File s3Image = amazonS3Service.convertMultipartToFile(file);
+		String filename = "post_" + insertedPost.getId() + "_image";
+		PutObjectResult result = amazonS3Service.uploadFileToS3Bucket(filename, s3Image);
 		
 		return insertedPost;
 	}
@@ -98,10 +107,18 @@ public class PostService {
 		if (post == null) {
 			throw new PostDoesNotExist("No such post ID exists: " + postId);
 		} 
+//		
+//		byte[] image = post.getImage();
+		String filename = "post_" + postId + "_image";
+		byte[] image = null;
+		try {
+			image = this.amazonS3Service.getFileFromS3Bucket(filename);
+		} catch (IOException e) {
+			log.error(e);
+			throw new GetImageException("Unable to get image from S3");
+		}
 		
-		byte[] image = post.getImage();
 		return image;
-		
 	}
 	
 	public boolean deletePost(int postId) throws PostDoesNotExist {
